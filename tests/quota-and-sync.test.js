@@ -15,6 +15,8 @@ import {
   upsertListingRecord,
   normalizeListingRow,
 } from '../server/autodevClient.js';
+import { importLucidHtmlToDb } from '../server/import-lucid.js';
+import { parseLucidMhtml } from '../src/utils/lucidMhtmlParser.js';
 
 test('seedDemoDatabase populates EV listings with 0 counted API calls', () => {
   const db = createDatabase(':memory:');
@@ -225,4 +227,75 @@ test('executeSync in demo mode consumes 0 live API quota calls', async () => {
 
   const quota = getQuotaSummary(db);
   assert.equal(quota.used, 0);
+});
+
+test('parseLucidMhtml and importLucidHtmlToDb decode MHTML, deduplicate Auto.dev matches, and use 0 API calls', () => {
+  const db = createDatabase(':memory:');
+  upsertListingRecord(
+    db,
+    {
+      vin: '50EA1TEA6SA009069',
+      year: 2025,
+      make: 'Lucid',
+      model: 'Air',
+      trim: 'Touring',
+      bodyStyle: 'Car',
+      drivetrain: 'AWD',
+      fuel: 'Electric',
+      exteriorColor: 'Zenith Red',
+      interiorColor: 'Mojave',
+      price: 47998,
+      miles: 22626,
+      condition: 'used',
+      dealer: 'Lucid Westfield Valley Fair Studio',
+      city: 'San Jose',
+      state: 'CA',
+      zip: '95050',
+      vdpUrl: 'https://www.autolist.com/lucid-air#vin=50EA1TEA6SA009069',
+      carfaxUrl: '',
+      primaryImage: '',
+      createdAt: '2026-11-13T10:00:00Z',
+      updatedAt: '2026-11-13T10:00:00Z',
+      removedAt: null,
+      rawJson: '{}',
+    },
+    'autodev'
+  );
+
+  const sampleMhtml = [
+    'MIME-Version: 1.0',
+    'Content-Type: multipart/related; boundary="TESTBOUNDARY"',
+    '',
+    '--TESTBOUNDARY',
+    'Content-Type: text/html; charset=utf-8',
+    'Content-Transfer-Encoding: quoted-printable',
+    '',
+    '<div role=3D"group" aria-label=3D"vehicle card">',
+    '<a href=3D"https://lucidmotors.com/inventory-vehicle?UUID=3Du1&amp;id=3D9100003864&amp;zip=3D91326"></a>',
+    '<span>2025</span><h3>Air Touring</h3><p>Used</p><p>22,626 mi.</p><h3>$47,998</h3>',
+    '<p>DreamDrive=E2=84=A2 Premium</p><p>Driver Assistance System</p>',
+    '</div>',
+    '<div role=3D"group" aria-label=3D"vehicle card">',
+    '<a href=3D"https://lucidmotors.com/inventory-vehicle?UUID=3Du2&amp;id=3D9100005651&amp;zip=3D91326"></a>',
+    '<span>2025</span><h3>Air Pure</h3><p>Used</p><p>12,977 mi.</p><h3>$44,098</h3>',
+    '<p>DreamDrive=E2=84=A2 Pro</p><p>Driver Assistance System</p>',
+    '</div>',
+    '--TESTBOUNDARY--',
+  ].join('\r\n');
+
+  const parsed = parseLucidMhtml(sampleMhtml);
+  assert.equal(parsed.length, 2);
+  assert.ok(parsed[0].trim.includes('DreamDrive Premium'));
+
+  const res = importLucidHtmlToDb(db, sampleMhtml, 'sample.mhtml');
+  assert.equal(res.ok, true);
+  assert.equal(res.matchedAutoDev, 1);
+  assert.equal(res.importedDirect, 1);
+
+  const rows = db.prepare('SELECT vin, source, trim FROM listings ORDER BY vin').all();
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].vin, '50EA1TEA6SA009069');
+  assert.ok(rows[0].trim.includes('DreamDrive Premium'));
+  assert.equal(rows[1].vin, 'LUCID-9100005651');
+  assert.equal(getQuotaSummary(db).used, 0);
 });

@@ -14,6 +14,7 @@ import {
   MapPin,
   Gauge,
   Activity,
+  Upload,
 } from 'lucide-react';
 import QuotaAuditView from './components/QuotaAuditView.jsx';
 import SyncModal from './components/SyncModal.jsx';
@@ -25,6 +26,10 @@ import {
   getPriceDropAmount,
   isNewToday,
 } from './utils/formatters.js';
+import {
+  findMatchingExistingLucid,
+  parseLucidMhtml,
+} from './utils/lucidMhtmlParser.js';
 
 const IS_STATIC_BUILD = import.meta.env.VITE_STATIC_MODE === 'true';
 const STATIC_BUILD_ID = import.meta.env.VITE_BUILD_ID || '';
@@ -32,6 +37,7 @@ const STATIC_SNAPSHOT_URL = STATIC_BUILD_ID
   ? `./data/dashboard.json?v=${encodeURIComponent(STATIC_BUILD_ID)}`
   : './data/dashboard.json';
 const LOCAL_PREFS_KEY = 'voltwatch_static_prefs_v1';
+const LOCAL_LUCID_IMPORT_KEY = 'voltwatch_lucid_direct_v1';
 
 function readLocalPrefs() {
   try {
@@ -47,10 +53,26 @@ function writeLocalPrefs(prefs) {
   } catch {}
 }
 
+function readLocalLucidImport() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(LOCAL_LUCID_IMPORT_KEY) || 'null');
+    return parsed && Array.isArray(parsed.listings) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeLocalLucidImport(payload) {
+  try {
+    localStorage.setItem(LOCAL_LUCID_IMPORT_KEY, JSON.stringify(payload));
+  } catch {}
+}
+
 export default function App() {
   const [rawStaticData, setRawStaticData] = useState(null);
   const [isStaticMode, setIsStaticMode] = useState(IS_STATIC_BUILD);
   const [staticPrefs, setStaticPrefs] = useState(() => readLocalPrefs());
+  const [lucidImport, setLucidImport] = useState(() => readLocalLucidImport());
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('inventory'); // 'inventory' | 'audit'
@@ -60,7 +82,9 @@ export default function App() {
   const [q, setQ] = useState('');
   const [make, setMake] = useState('');
   const [condition, setCondition] = useState('');
+  const [sourceFilter, setSourceFilter] = useState('');
   const [stateCode, setStateCode] = useState('');
+  const [minYear, setMinYear] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [sort, setSort] = useState('updated_desc');
   const [onlyDrops, setOnlyDrops] = useState(false);
@@ -71,6 +95,7 @@ export default function App() {
   const [selectedVin, setSelectedVin] = useState(null);
   const [toast, setToast] = useState(null);
   const autoCheckedRef = useRef(false);
+  const lucidFileInputRef = useRef(null);
 
   const showToast = useCallback((message) => {
     setToast(message);
@@ -81,7 +106,25 @@ export default function App() {
 
   const applyStaticFilters = useCallback(
     (snapshot) => {
-      const merged = snapshot.listings.map((l) => {
+      const hasNewerLocalLucid =
+        lucidImport &&
+        (!snapshot.generatedAt || Date.parse(lucidImport.importedAt) > Date.parse(snapshot.generatedAt));
+
+      const baseListings = hasNewerLocalLucid
+        ? snapshot.listings.filter((l) => l.source !== 'lucid_direct')
+        : snapshot.listings;
+
+      let combinedListings = [...baseListings];
+      if (hasNewerLocalLucid) {
+        const extraDirect = [];
+        for (const item of lucidImport.listings) {
+          const match = findMatchingExistingLucid(baseListings, item);
+          if (!match) extraDirect.push(item);
+        }
+        combinedListings = [...baseListings, ...extraDirect];
+      }
+
+      const merged = combinedListings.map((l) => {
         const pref = staticPrefs[l.vin];
         return {
           ...l,
@@ -97,7 +140,9 @@ export default function App() {
         }
         if (make && l.make !== make) return false;
         if (condition && l.condition !== condition) return false;
+        if (sourceFilter && l.source !== sourceFilter) return false;
         if (stateCode && l.state !== stateCode) return false;
+        if (minYear && Number(minYear) > 0 && Number(l.year) < Number(minYear)) return false;
         if (maxPrice && Number(maxPrice) > 0 && (l.price == null || l.price > Number(maxPrice))) return false;
         if (onlyStarred && !l.is_starred) return false;
         if (onlyDrops && !(l.previous_price != null && l.price < l.previous_price)) return false;
@@ -115,16 +160,36 @@ export default function App() {
       };
       filtered = [...filtered].sort(sorters[sort] || sorters.updated_desc);
 
+      const priced = merged.filter((l) => l.price != null);
+      const makeCounts = {};
+      for (const l of merged) {
+        makeCounts[l.make] = (makeCounts[l.make] || 0) + 1;
+      }
+      const makeFacets = Object.entries(makeCounts)
+        .map(([m, count]) => ({ make: m, count }))
+        .sort((a, b) => b.count - a.count || a.make.localeCompare(b.make));
+
       return {
         ...snapshot,
         listings: filtered,
+        facets: {
+          ...snapshot.facets,
+          makes: makeFacets,
+        },
         kpis: {
           ...snapshot.kpis,
+          totalListings: merged.length,
+          avgPrice: priced.length
+            ? Math.round(priced.reduce((sum, l) => sum + Number(l.price), 0) / priced.length)
+            : 0,
+          minPrice: priced.length ? Math.min(...priced.map((l) => Number(l.price))) : 0,
+          priceDropsCount: merged.filter((l) => getPriceDropAmount(l) > 0).length,
+          newTodayCount: merged.filter((l) => isNewToday(l)).length,
           starredCount: merged.filter((l) => l.is_starred).length,
         },
       };
     },
-    [q, make, condition, stateCode, maxPrice, sort, onlyDrops, onlyNew, onlyStarred, staticPrefs]
+    [q, make, condition, sourceFilter, stateCode, minYear, maxPrice, sort, onlyDrops, onlyNew, onlyStarred, staticPrefs, lucidImport]
   );
 
   const fetchDashboard = useCallback(async () => {
@@ -146,7 +211,9 @@ export default function App() {
     if (q.trim()) params.set('q', q.trim());
     if (make) params.set('make', make);
     if (condition) params.set('condition', condition);
+    if (sourceFilter) params.set('source', sourceFilter);
     if (stateCode) params.set('state', stateCode);
+    if (minYear) params.set('minYear', minYear);
     if (maxPrice) params.set('maxPrice', maxPrice);
     if (sort) params.set('sort', sort);
     if (onlyDrops) params.set('onlyDrops', 'true');
@@ -171,7 +238,9 @@ export default function App() {
     q,
     make,
     condition,
+    sourceFilter,
     stateCode,
+    minYear,
     maxPrice,
     sort,
     onlyDrops,
@@ -267,11 +336,76 @@ export default function App() {
     showToast(`Live VIN ${vin} verified (1 API call used).`);
   }
 
+  async function handleLucidFileChange(e) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+
+    try {
+      const rawContent = await file.text();
+      if (!isStaticMode) {
+        const res = await fetch('/api/import/lucid', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ rawContent, filename: file.name }),
+        });
+        const result = await res.json();
+        if (!res.ok || !result.ok) {
+          showToast(result.error || 'Could not find Lucid vehicles in that file.');
+          return;
+        }
+        await fetchDashboard();
+        showToast(
+          `Imported ${result.importedDirect} Lucid Direct EVs (${result.matchedAutoDev} matched Auto.dev) · 0 API calls.`
+        );
+        return;
+      }
+
+      const nowIso = new Date().toISOString();
+      const parsed = parseLucidMhtml(rawContent, nowIso);
+      if (parsed.length === 0) {
+        showToast('No Lucid vehicles found. Save page as Webpage, Single File (.mhtml) or Complete (.html).');
+        return;
+      }
+
+      const prevList = [
+        ...(lucidImport?.listings || []),
+        ...(rawStaticData?.listings?.filter((l) => l.source === 'lucid_direct') || []),
+      ];
+      const prevByVin = new Map(prevList.map((l) => [l.vin, l]));
+
+      const enriched = parsed.map((item) => {
+        const prev = prevByVin.get(item.vin);
+        if (!prev) return item;
+        const priceChanged = prev.price != null && item.price != null && item.price !== prev.price;
+        const history = Array.isArray(prev.price_history) ? [...prev.price_history] : [];
+        if (priceChanged) {
+          history.push({ price: item.price, recordedAt: nowIso });
+        }
+        return {
+          ...item,
+          first_seen_at: prev.first_seen_at || item.first_seen_at,
+          previous_price: priceChanged ? prev.price : prev.previous_price,
+          price_history: history.length ? history : item.price_history,
+        };
+      });
+
+      const payload = { importedAt: nowIso, filename: file.name, listings: enriched };
+      setLucidImport(payload);
+      writeLocalLucidImport(payload);
+      showToast(`Imported ${enriched.length} Lucid Direct EVs from ${file.name} (0 API calls).`);
+    } catch (err) {
+      showToast(`Lucid import failed: ${err.message}`);
+    }
+  }
+
   function handleClearFilters() {
     setQ('');
     setMake('');
     setCondition('');
+    setSourceFilter('');
     setStateCode('');
+    setMinYear('');
     setMaxPrice('');
     setSort('updated_desc');
     setOnlyDrops(false);
@@ -293,7 +427,7 @@ export default function App() {
     Math.min(100, ((quota.cap - quota.reserveBuffer) / quota.cap) * 100)
   );
   const hasActiveFilters = Boolean(
-    q || make || condition || stateCode || maxPrice || onlyDrops || onlyNew || onlyStarred
+    q || make || condition || sourceFilter || stateCode || minYear || maxPrice || onlyDrops || onlyNew || onlyStarred
   );
 
   return (
@@ -338,6 +472,22 @@ export default function App() {
               <Database size={13} />
               Cached {formatRelativeTime(kpis.lastCacheUpdate)} · 0 calls on load
             </span>
+
+            <input
+              ref={lucidFileInputRef}
+              type="file"
+              accept=".mhtml,.html,.htm"
+              style={{ display: 'none' }}
+              onChange={handleLucidFileChange}
+            />
+            <button
+              type="button"
+              className="btn"
+              onClick={() => lucidFileInputRef.current?.click()}
+              title="Import a saved Lucid Motors pre-owned webpage (.mhtml or .html) with 0 API calls"
+            >
+              <Upload size={15} /> Import Lucid (.mhtml)
+            </button>
 
             {!isStaticMode && (
               <>
@@ -572,6 +722,29 @@ export default function App() {
                   <option value="used">Used</option>
                   <option value="cpo">Certified (CPO)</option>
                   <option value="new">New</option>
+                </select>
+
+                <select
+                  id="ev-source-select"
+                  className="select-control"
+                  value={sourceFilter}
+                  onChange={(e) => setSourceFilter(e.target.value)}
+                >
+                  <option value="">All Sources</option>
+                  <option value="autodev">Auto.dev Dealers</option>
+                  <option value="lucid_direct">Lucid Direct</option>
+                </select>
+
+                <select
+                  id="ev-min-year-select"
+                  className="select-control"
+                  value={minYear}
+                  onChange={(e) => setMinYear(e.target.value)}
+                >
+                  <option value="">All Years</option>
+                  <option value="2025">2025+ Only</option>
+                  <option value="2024">2024+</option>
+                  <option value="2023">2023+</option>
                 </select>
 
                 <select

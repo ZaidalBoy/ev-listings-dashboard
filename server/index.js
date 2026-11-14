@@ -17,6 +17,7 @@ import {
   isCacheStale,
   refreshSingleVin,
 } from './autodevClient.js';
+import { importLucidHtmlToDb } from './import-lucid.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT) || 3001;
@@ -26,7 +27,7 @@ export function createApp({ dbPath } = {}) {
   seedDemoDatabase(db);
 
   const app = express();
-  app.use(express.json());
+  app.use(express.json({ limit: '25mb' }));
 
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true, liveApiConfigured: hasLiveApiKey() });
@@ -38,6 +39,7 @@ export function createApp({ dbPath } = {}) {
       q = '',
       make = '',
       condition = '',
+      source = '',
       state = '',
       maxPrice = '',
       minYear = '',
@@ -63,6 +65,10 @@ export function createApp({ dbPath } = {}) {
     if (condition) {
       where.push('condition = ?');
       params.push(String(condition));
+    }
+    if (source) {
+      where.push('source = ?');
+      params.push(String(source));
     }
     if (state) {
       where.push('state = ?');
@@ -221,6 +227,21 @@ export function createApp({ dbPath } = {}) {
       res.json(result);
     } catch (err) {
       res.status(500).json({ error: err.message });
+    }
+  });
+
+  // Zero-cost import from saved Lucid Motors MHTML/HTML page
+  app.post('/api/import/lucid', (req, res) => {
+    try {
+      const { rawContent, filename } = req.body || {};
+      if (!rawContent || typeof rawContent !== 'string') {
+        return res.status(400).json({ error: 'Missing rawContent HTML/MHTML string.' });
+      }
+      const result = importLucidHtmlToDb(db, rawContent, filename || 'browser-upload');
+      if (!result.ok) return res.status(400).json(result);
+      return res.json(result);
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
     }
   });
 

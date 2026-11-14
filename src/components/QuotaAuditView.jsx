@@ -139,8 +139,12 @@ export default function QuotaAuditView({ quota, settings, snapshots, recentCalls
                   </td>
                   <td><span className="mono">{s.trigger_type}</span></td>
                   <td>
-                    <span className={`status-pill ${s.mode === 'live' ? 'live' : 'demo'}`}>
-                      {s.mode.toUpperCase()}
+                    <span
+                      className={`status-pill ${
+                        s.mode === 'live' ? 'live' : s.mode === 'lucid_direct' ? 'cache' : 'demo'
+                      }`}
+                    >
+                      {s.mode === 'lucid_direct' ? 'LUCID DIRECT' : s.mode.toUpperCase()}
                     </span>
                   </td>
                   <td className="mono" style={{ fontWeight: 700 }}>{s.calls_used}</td>

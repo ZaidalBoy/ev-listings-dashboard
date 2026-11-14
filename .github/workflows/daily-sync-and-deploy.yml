@@ -58,6 +58,9 @@ jobs:
             node server/cli-sync.js --profile="$PROFILE"
           fi
 
+      - name: Import Lucid Direct MHTML/HTML files (if present in imports/)
+        run: npm run import:lucid
+
       - name: Export static snapshot JSON for GitHub Pages
         env:
           AUTODEV_API_KEY: ${{ secrets.AUTODEV_API_KEY }}

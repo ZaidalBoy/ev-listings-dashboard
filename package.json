@@ -9,6 +9,7 @@
     "build": "vite build",
     "start": "NODE_ENV=production node server/index.js",
     "sync:daily": "node server/cli-sync.js",
+    "import:lucid": "node server/import-lucid.js",
     "export:static": "node server/export-static.js",
     "test": "node --test tests/*.test.js"
   },

@@ -221,20 +221,24 @@ export default function ListingDrawer({
           <button
             type="button"
             className="btn"
-            disabled={!liveApiConfigured || refreshingVin}
+            disabled={!liveApiConfigured || refreshingVin || listing.source === 'lucid_direct'}
             onClick={handleVerifyLive}
             title={
-              liveApiConfigured
-                ? 'Fetches GET /listings/{vin} directly from Auto.dev'
-                : 'Add AUTODEV_API_KEY in .env to verify live VIN pricing'
+              listing.source === 'lucid_direct'
+                ? 'Lucid Direct imports do not use Auto.dev VIN lookups (0 API calls)'
+                : liveApiConfigured
+                  ? 'Fetches GET /listings/{vin} directly from Auto.dev'
+                  : 'Add AUTODEV_API_KEY in .env to verify live VIN pricing'
             }
           >
             <RefreshCw size={14} className={refreshingVin ? 'spin' : ''} />
-            {refreshingVin
-              ? 'Verifying VIN...'
-              : liveApiConfigured
-                ? 'Verify Live Price (Costs 1 API Call)'
-                : 'Verify Live Price (Requires AUTODEV_API_KEY)'}
+            {listing.source === 'lucid_direct'
+              ? 'Lucid Direct Import (0 API Calls)'
+              : refreshingVin
+                ? 'Verifying VIN...'
+                : liveApiConfigured
+                  ? 'Verify Live Price (Costs 1 API Call)'
+                  : 'Verify Live Price (Requires AUTODEV_API_KEY)'}
           </button>
 
           <div style={{ display: 'flex', gap: '8px' }}>
