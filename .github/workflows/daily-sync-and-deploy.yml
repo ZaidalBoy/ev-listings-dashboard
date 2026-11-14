@@ -65,6 +65,9 @@ jobs:
           git diff --staged --quiet || git commit -m "chore: daily EV snapshot update"
           git push
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Build static Vite bundle for GitHub Pages
         env:
           VITE_STATIC_MODE: 'true'
