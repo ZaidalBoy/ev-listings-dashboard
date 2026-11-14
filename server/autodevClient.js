@@ -243,7 +243,7 @@ export function buildSyncPlan(db, options = {}) {
       }
       if (options.zip) {
         params.zip = options.zip;
-        params.distance = options.distance ?? settings.distance ?? 200;
+        params.distance = options.distance ?? settings.distance ?? 300;
       }
       if (options.state ?? settings.stateFilter) {
         params['retailListing.state'] = options.state ?? settings.stateFilter;

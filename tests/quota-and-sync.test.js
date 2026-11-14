@@ -38,7 +38,7 @@ test('default presets target Ioniq 5 and Lucid Air in ZIPs 91311 and 94107 (2025
 
   for (const p of settings.watchlistPresets) {
     assert.equal(p.enabled, true);
-    assert.equal(p.params.distance, 200);
+    assert.equal(p.params.distance, 300);
     assert.equal(p.params['retailListing.price'], '1-50000');
     assert.equal(p.params['retailListing.used'], 'true');
     assert.ok(p.params['vehicle.year'].startsWith('2025-'));
