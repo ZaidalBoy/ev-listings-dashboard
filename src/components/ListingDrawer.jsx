@@ -88,6 +88,14 @@ export default function ListingDrawer({
                 : listing.primary_image || './images/ev_suv_emerald.jpg'
             }
             alt={`${listing.year} ${listing.make} ${listing.model}`}
+            onError={(e) => {
+              if (e.currentTarget.dataset.fallbackApplied) return;
+              e.currentTarget.dataset.fallbackApplied = '1';
+              e.currentTarget.src =
+                listing.make === 'Lucid'
+                  ? './images/ev_sedan_silver.jpg'
+                  : './images/ev_suv_emerald.jpg';
+            }}
           />
         </div>
 

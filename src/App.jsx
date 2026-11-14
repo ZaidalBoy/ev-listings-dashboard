@@ -27,6 +27,10 @@ import {
 } from './utils/formatters.js';
 
 const IS_STATIC_BUILD = import.meta.env.VITE_STATIC_MODE === 'true';
+const STATIC_BUILD_ID = import.meta.env.VITE_BUILD_ID || '';
+const STATIC_SNAPSHOT_URL = STATIC_BUILD_ID
+  ? `./data/dashboard.json?v=${encodeURIComponent(STATIC_BUILD_ID)}`
+  : './data/dashboard.json';
 const LOCAL_PREFS_KEY = 'voltwatch_static_prefs_v1';
 
 function readLocalPrefs() {
@@ -126,7 +130,7 @@ export default function App() {
   const fetchDashboard = useCallback(async () => {
     if (IS_STATIC_BUILD) {
       if (!rawStaticData) {
-        const res = await fetch('./data/dashboard.json');
+        const res = await fetch(STATIC_SNAPSHOT_URL, { cache: 'no-cache' });
         const snap = await res.json();
         setRawStaticData(snap);
         setDashboard(applyStaticFilters(snap));
@@ -156,7 +160,7 @@ export default function App() {
       setDashboard(data);
       setIsStaticMode(false);
     } catch {
-      const res = await fetch('./data/dashboard.json');
+      const res = await fetch(STATIC_SNAPSHOT_URL, { cache: 'no-cache' });
       const snap = await res.json();
       setRawStaticData(snap);
       setDashboard(applyStaticFilters(snap));
@@ -496,7 +500,7 @@ export default function App() {
           {activeTab === 'inventory' && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span className="status-pill cache" style={{ fontSize: '11px' }}>
-                Instant SQLite filter · 0 API calls
+                {isStaticMode ? 'Instant local filter · 0 API calls' : 'Instant SQLite filter · 0 API calls'}
               </span>
               <div className="tab-group">
                 <button
@@ -675,6 +679,14 @@ export default function App() {
                           }
                           alt={`${item.year} ${item.make} ${item.model}`}
                           loading="lazy"
+                          onError={(e) => {
+                            if (e.currentTarget.dataset.fallbackApplied) return;
+                            e.currentTarget.dataset.fallbackApplied = '1';
+                            e.currentTarget.src =
+                              item.make === 'Lucid'
+                                ? './images/ev_sedan_silver.jpg'
+                                : './images/ev_suv_emerald.jpg';
+                          }}
                         />
                         <div className="card-badges">
                           <span className="badge badge-cond">{item.condition}</span>
