@@ -1,7 +1,347 @@
 {
-  "generatedAt": "2026-11-14T03:11:12.103Z",
+  "generatedAt": "2026-11-14T03:14:39.046Z",
   "staticSnapshot": true,
   "listings": [
+    {
+      "vin": "50EA1PGA4SA008863",
+      "year": 2025,
+      "make": "Lucid",
+      "model": "Air",
+      "trim": "Pure",
+      "body_style": "Car",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Gray",
+      "interior_color": "mojave",
+      "price": 35898,
+      "previous_price": 36070,
+      "miles": 15294,
+      "condition": "used",
+      "dealer": "Chino Hills Ford",
+      "city": "Chino Hills",
+      "state": "CA",
+      "zip": "91710",
+      "vdp_url": "https://chinohillsford.com/used/Lucid/2025-Lucid-Air-23c14764ac18551af8c02fae1e817ed6.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=50EA1PGA4SA008863&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/50EA1PGA4SA008863-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T02:40:07.772Z",
+      "last_seen_at": "2026-11-14T03:14:38.590Z",
+      "updated_at": "2026-11-14T03:14:38.590Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 36070,
+          "recordedAt": "2026-10-11 02:32:03"
+        },
+        {
+          "price": 35898,
+          "recordedAt": "2026-11-14T03:14:38.590Z"
+        }
+      ]
+    },
+    {
+      "vin": "50EA1PGA3SA001743",
+      "year": 2025,
+      "make": "Lucid",
+      "model": "Air",
+      "trim": "Pure",
+      "body_style": "Car",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Black",
+      "interior_color": "mojave",
+      "price": 36988,
+      "previous_price": 37372,
+      "miles": 18007,
+      "condition": "used",
+      "dealer": "Chino Hills Ford",
+      "city": "Chino Hills",
+      "state": "CA",
+      "zip": "91710",
+      "vdp_url": "https://chinohillsford.com/used/Lucid/2025-Lucid-Air-b1dd6a36ac18031ef338a299ef1d5a09.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=50EA1PGA3SA001743&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/50EA1PGA3SA001743-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T02:40:07.776Z",
+      "last_seen_at": "2026-11-14T03:14:38.590Z",
+      "updated_at": "2026-11-14T03:14:38.590Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 37372,
+          "recordedAt": "2026-11-07 02:33:37"
+        },
+        {
+          "price": 36988,
+          "recordedAt": "2026-11-14T03:14:38.590Z"
+        }
+      ]
+    },
+    {
+      "vin": "50EA1PGA4TA016057",
+      "year": 2026,
+      "make": "Lucid",
+      "model": "Air",
+      "trim": "Pure",
+      "body_style": "Sedan",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Gray",
+      "interior_color": "Black",
+      "price": 49849,
+      "previous_price": null,
+      "miles": 8464,
+      "condition": "used",
+      "dealer": "BMW of Murrieta",
+      "city": "Murrieta",
+      "state": "CA",
+      "zip": "92562",
+      "vdp_url": "https://hendrickineoscharleston.com/used/Lucid/2026-Lucid-Air-e9292914ac1811ad1dcb5623dd7d0ad1.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=50EA1PGA4TA016057&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/50EA1PGA4TA016057-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T02:40:07.771Z",
+      "last_seen_at": "2026-11-14T03:14:38.589Z",
+      "updated_at": "2026-11-14T03:14:38.589Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 49849,
+          "recordedAt": "2026-09-28 23:17:19"
+        }
+      ]
+    },
+    {
+      "vin": "50EA1PGA5SA004174",
+      "year": 2025,
+      "make": "Lucid",
+      "model": "Air",
+      "trim": "Pure",
+      "body_style": "Car",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Unspecified",
+      "interior_color": "Brown",
+      "price": 38392,
+      "previous_price": 38564,
+      "miles": 11652,
+      "condition": "used",
+      "dealer": "Chevrolet of Carson",
+      "city": "Carson",
+      "state": "CA",
+      "zip": "90810",
+      "vdp_url": "https://chevyofcarson.com/electric-used/Lucid/2025-Lucid-Air-827025b3ac1855aa99cc24c36d0f67bb.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=50EA1PGA5SA004174&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/50EA1PGA5SA004174-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T02:40:07.772Z",
+      "last_seen_at": "2026-11-14T03:14:38.589Z",
+      "updated_at": "2026-11-14T03:14:38.589Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 38564,
+          "recordedAt": "2026-10-28 14:34:52"
+        },
+        {
+          "price": 38392,
+          "recordedAt": "2026-11-14T03:14:38.589Z"
+        }
+      ]
+    },
+    {
+      "vin": "7YAKM4DA7SY023263",
+      "year": 2025,
+      "make": "Hyundai",
+      "model": "Ioniq 5",
+      "trim": "SE",
+      "body_style": "SUV",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Digital Teal",
+      "interior_color": "Black",
+      "price": 28850,
+      "previous_price": 29839,
+      "miles": 6765,
+      "condition": "used",
+      "dealer": "Team Volkswagen of Hayward",
+      "city": "Hayward",
+      "state": "CA",
+      "zip": "94544",
+      "vdp_url": "https://haywardnissan.com/used/Hyundai/2025-Hyundai-IONIQ-5-ffafbe6aac1816be1936020a27ade695.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=7YAKM4DA7SY023263&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/7YAKM4DA7SY023263-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T02:40:03.667Z",
+      "last_seen_at": "2026-11-14T03:14:37.777Z",
+      "updated_at": "2026-11-14T03:14:37.777Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 29839,
+          "recordedAt": "2026-10-04 02:01:44"
+        },
+        {
+          "price": 28850,
+          "recordedAt": "2026-11-14T03:14:37.777Z"
+        }
+      ]
+    },
+    {
+      "vin": "7YAKN4DA5TY043168",
+      "year": 2026,
+      "make": "Hyundai",
+      "model": "Ioniq 5",
+      "trim": "SEL",
+      "body_style": "SUV",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Cyber Gray",
+      "interior_color": "Black",
+      "price": 37308,
+      "previous_price": null,
+      "miles": 8573,
+      "condition": "cpo",
+      "dealer": "Huntington Beach Hyundai",
+      "city": "Huntington Beach",
+      "state": "CA",
+      "zip": "92647",
+      "vdp_url": "https://huntingtonbeachhyundai.com/certified/Hyundai/2026-Hyundai-IONIQ-5--999e52d7ac18240ddaef983233adcf79.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=7YAKN4DA5TY043168&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/7YAKN4DA5TY043168-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T03:14:36.657Z",
+      "last_seen_at": "2026-11-14T03:14:36.657Z",
+      "updated_at": "2026-11-14T03:14:36.657Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 37308,
+          "recordedAt": "2026-11-02 19:55:18"
+        }
+      ]
+    },
+    {
+      "vin": "7YAKM4DA4SY015234",
+      "year": 2025,
+      "make": "Hyundai",
+      "model": "Ioniq 5",
+      "trim": "SE",
+      "body_style": "SUV",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Digital Teal",
+      "interior_color": "Black",
+      "price": 29995,
+      "previous_price": null,
+      "miles": 11645,
+      "condition": "used",
+      "dealer": "Victorville Hyundai",
+      "city": "Victorville",
+      "state": "CA",
+      "zip": "92392",
+      "vdp_url": "https://victorvillehyundai.com/used/Hyundai/2025-Hyundai-IONIQ-5-victorville-ca-b3b84ebbac180a2076b815d1ac2f819b.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=7YAKM4DA4SY015234&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/7YAKM4DA4SY015234-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T03:14:36.657Z",
+      "last_seen_at": "2026-11-14T03:14:36.657Z",
+      "updated_at": "2026-11-14T03:14:36.657Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 29995,
+          "recordedAt": "2026-11-07 02:32:27"
+        }
+      ]
+    },
+    {
+      "vin": "7YAKN4DA1TY046875",
+      "year": 2026,
+      "make": "Hyundai",
+      "model": "Ioniq 5",
+      "trim": "SEL",
+      "body_style": "SUV",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Digital Teal",
+      "interior_color": "Black",
+      "price": 36320,
+      "previous_price": null,
+      "miles": 7427,
+      "condition": "cpo",
+      "dealer": "Huntington Beach Hyundai",
+      "city": "Huntington Beach",
+      "state": "CA",
+      "zip": "92647",
+      "vdp_url": "https://huntingtonbeachhyundai.com/certified/Hyundai/2026-Hyundai-IONIQ-5--999e5182ac185aa9f4b085a369ea92a3.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=7YAKN4DA1TY046875&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/7YAKN4DA1TY046875-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T03:14:36.637Z",
+      "last_seen_at": "2026-11-14T03:14:36.637Z",
+      "updated_at": "2026-11-14T03:14:36.637Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 36320,
+          "recordedAt": "2026-11-02 10:41:59"
+        }
+      ]
+    },
+    {
+      "vin": "7YAKN4DAXTY049709",
+      "year": 2026,
+      "make": "Hyundai",
+      "model": "Ioniq 5",
+      "trim": "SEL",
+      "body_style": "SUV",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Gray",
+      "interior_color": "Black",
+      "price": 36400,
+      "previous_price": null,
+      "miles": 11539,
+      "condition": "cpo",
+      "dealer": "Keyes Hyundai of Mission Hills",
+      "city": "Mission Hills",
+      "state": "CA",
+      "zip": "91345",
+      "vdp_url": "https://mhhyundai.com/certified/Hyundai/2026-Hyundai-IONIQ-5-f6622c17ac18191cd126ee727b3a7c79.htm",
+      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=7YAKN4DAXTY049709&partner=FRD_2",
+      "primary_image": "https://retail.photos.vin/7YAKN4DAXTY049709-1.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "autodev",
+      "first_seen_at": "2026-11-14T03:14:36.636Z",
+      "last_seen_at": "2026-11-14T03:14:36.636Z",
+      "updated_at": "2026-11-14T03:14:36.636Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 36400,
+          "recordedAt": "2026-10-01 03:51:16"
+        }
+      ]
+    },
     {
       "vin": "50EA1TEA6SA009069",
       "year": 2025,
@@ -323,42 +663,6 @@
         {
           "price": 48500,
           "recordedAt": "2026-10-31 05:33:24"
-        }
-      ]
-    },
-    {
-      "vin": "50EA1PGA3SA001743",
-      "year": 2025,
-      "make": "Lucid",
-      "model": "Air",
-      "trim": "Pure",
-      "body_style": "Car",
-      "drivetrain": "RWD",
-      "fuel": "Electric",
-      "exterior_color": "Infinite Black Metallic",
-      "interior_color": "Mojave in Lucid Black and Graphite leatherette",
-      "price": 37372,
-      "previous_price": null,
-      "miles": 18007,
-      "condition": "used",
-      "dealer": "Chino Hills Ford",
-      "city": "Chino",
-      "state": "CA",
-      "zip": "91710",
-      "vdp_url": "https://chinohillsford.com/used/Lucid/2025-Lucid-Air-b1dd6a36ac18031ef338a299ef1d5a09.htm",
-      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=50EA1PGA3SA001743&partner=FRD_2",
-      "primary_image": "https://retail.photos.vin/50EA1PGA3SA001743-1.jpg",
-      "is_starred": false,
-      "notes": "",
-      "source": "autodev",
-      "first_seen_at": "2026-11-14T02:40:07.776Z",
-      "last_seen_at": "2026-11-14T02:40:07.776Z",
-      "updated_at": "2026-11-14T02:40:07.776Z",
-      "removed_at": null,
-      "price_history": [
-        {
-          "price": 37372,
-          "recordedAt": "2026-11-07 02:33:37"
         }
       ]
     },
@@ -723,78 +1027,6 @@
       ]
     },
     {
-      "vin": "50EA1PGA4SA008863",
-      "year": 2025,
-      "make": "Lucid",
-      "model": "Air",
-      "trim": "Pure",
-      "body_style": "Car",
-      "drivetrain": "RWD",
-      "fuel": "Electric",
-      "exterior_color": "Gray",
-      "interior_color": "Brown",
-      "price": 36070,
-      "previous_price": null,
-      "miles": 15294,
-      "condition": "used",
-      "dealer": "Chino Hills Ford",
-      "city": "Chino Hills",
-      "state": "CA",
-      "zip": "91710",
-      "vdp_url": "https://chinohillsford.com/used/Lucid/2025-Lucid-Air-23c14764ac18551af8c02fae1e817ed6.htm",
-      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=50EA1PGA4SA008863&partner=FRD_2",
-      "primary_image": "https://retail.photos.vin/50EA1PGA4SA008863-1.jpg",
-      "is_starred": false,
-      "notes": "",
-      "source": "autodev",
-      "first_seen_at": "2026-11-14T02:40:07.772Z",
-      "last_seen_at": "2026-11-14T02:40:07.772Z",
-      "updated_at": "2026-11-14T02:40:07.772Z",
-      "removed_at": null,
-      "price_history": [
-        {
-          "price": 36070,
-          "recordedAt": "2026-10-11 02:32:03"
-        }
-      ]
-    },
-    {
-      "vin": "50EA1PGA5SA004174",
-      "year": 2025,
-      "make": "Lucid",
-      "model": "Air",
-      "trim": "Pure",
-      "body_style": "Car",
-      "drivetrain": "RWD",
-      "fuel": "Electric",
-      "exterior_color": "Unspecified",
-      "interior_color": "Brown",
-      "price": 38564,
-      "previous_price": null,
-      "miles": 11652,
-      "condition": "used",
-      "dealer": "Chevrolet of Carson",
-      "city": "Carson",
-      "state": "CA",
-      "zip": "90810",
-      "vdp_url": "https://chevyofcarson.com/electric-used/Lucid/2025-Lucid-Air-827025b3ac1855aa99cc24c36d0f67bb.htm",
-      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=50EA1PGA5SA004174&partner=FRD_2",
-      "primary_image": "https://retail.photos.vin/50EA1PGA5SA004174-1.jpg",
-      "is_starred": false,
-      "notes": "",
-      "source": "autodev",
-      "first_seen_at": "2026-11-14T02:40:07.772Z",
-      "last_seen_at": "2026-11-14T02:40:07.772Z",
-      "updated_at": "2026-11-14T02:40:07.772Z",
-      "removed_at": null,
-      "price_history": [
-        {
-          "price": 38564,
-          "recordedAt": "2026-10-28 14:34:52"
-        }
-      ]
-    },
-    {
       "vin": "50EA1PGA6SA005012",
       "year": 2025,
       "make": "Lucid",
@@ -827,42 +1059,6 @@
         {
           "price": 37450,
           "recordedAt": "2026-10-20 04:39:22"
-        }
-      ]
-    },
-    {
-      "vin": "50EA1PGA4TA016057",
-      "year": 2026,
-      "make": "Lucid",
-      "model": "Air",
-      "trim": "Pure",
-      "body_style": "Sedan",
-      "drivetrain": "RWD",
-      "fuel": "Electric",
-      "exterior_color": "Gray",
-      "interior_color": "Black",
-      "price": 49849,
-      "previous_price": null,
-      "miles": 8464,
-      "condition": "used",
-      "dealer": "BMW of Murrieta",
-      "city": "Murrieta",
-      "state": "CA",
-      "zip": "92562",
-      "vdp_url": "https://landrovercharlotte.com/used/Lucid/2026-Lucid-Air-e9292914ac1811ad1dcb5623dd7d0ad1.htm",
-      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=50EA1PGA4TA016057&partner=FRD_2",
-      "primary_image": "https://retail.photos.vin/50EA1PGA4TA016057-1.jpg",
-      "is_starred": false,
-      "notes": "",
-      "source": "autodev",
-      "first_seen_at": "2026-11-14T02:40:07.771Z",
-      "last_seen_at": "2026-11-14T02:40:07.771Z",
-      "updated_at": "2026-11-14T02:40:07.771Z",
-      "removed_at": null,
-      "price_history": [
-        {
-          "price": 49849,
-          "recordedAt": "2026-09-28 23:17:19"
         }
       ]
     },
@@ -1187,42 +1383,6 @@
         {
           "price": 34335,
           "recordedAt": "2026-10-03 05:33:08"
-        }
-      ]
-    },
-    {
-      "vin": "7YAKM4DA7SY023263",
-      "year": 2025,
-      "make": "Hyundai",
-      "model": "Ioniq 5",
-      "trim": "SE",
-      "body_style": "",
-      "drivetrain": "RWD",
-      "fuel": "Electric",
-      "exterior_color": "Turquoise",
-      "interior_color": "Black",
-      "price": 29839,
-      "previous_price": null,
-      "miles": 6765,
-      "condition": "used",
-      "dealer": "Team Volkswagen of Hayward",
-      "city": "Hayward",
-      "state": "CA",
-      "zip": "94544",
-      "vdp_url": "https://vwhayward.com/electric-used/Hyundai/2025-Hyundai-IONIQ-5-ffafbe6aac1816be1936020a27ade695.htm",
-      "carfax_url": "https://www.carfax.com/VehicleHistory/p/Report.cfx?vin=7YAKM4DA7SY023263&partner=FRD_2",
-      "primary_image": "https://retail.photos.vin/7YAKM4DA7SY023263-1.jpg",
-      "is_starred": false,
-      "notes": "",
-      "source": "autodev",
-      "first_seen_at": "2026-11-14T02:40:03.667Z",
-      "last_seen_at": "2026-11-14T02:40:03.667Z",
-      "updated_at": "2026-11-14T02:40:03.667Z",
-      "removed_at": null,
-      "price_history": [
-        {
-          "price": 29839,
-          "recordedAt": "2026-10-04 02:01:44"
         }
       ]
     },
@@ -1948,19 +2108,19 @@
     }
   ],
   "kpis": {
-    "totalListings": 54,
-    "avgPrice": 39594,
+    "totalListings": 58,
+    "avgPrice": 39248,
     "minPrice": 23410,
-    "priceDropsCount": 0,
-    "newTodayCount": 54,
+    "priceDropsCount": 4,
+    "newTodayCount": 58,
     "starredCount": 0,
-    "lastCacheUpdate": "2026-11-14T02:40:08.690Z"
+    "lastCacheUpdate": "2026-11-14T03:14:38.590Z"
   },
   "facets": {
     "makes": [
       {
         "make": "Hyundai",
-        "count": 30
+        "count": 34
       },
       {
         "make": "Lucid",
@@ -1970,28 +2130,28 @@
     "states": [
       {
         "state": "CA",
-        "count": 54
+        "count": 58
       }
     ]
   },
   "quota": {
     "monthKey": "2026-11",
-    "used": 23,
+    "used": 27,
     "cap": 1000,
-    "remaining": 977,
+    "remaining": 973,
     "reserveBuffer": 50,
-    "autoSyncBudgetRemaining": 927,
-    "pctUsed": 2.3,
+    "autoSyncBudgetRemaining": 923,
+    "pctUsed": 2.7,
     "dayOfMonth": 14,
     "daysInMonth": 30,
     "daysRemaining": 17,
-    "dailyBurnRate": 1.64,
-    "projectedMonthEnd": 49,
-    "safeDailyBudget": 57.5,
+    "dailyBurnRate": 1.93,
+    "projectedMonthEnd": 58,
+    "safeDailyBudget": 57.2,
     "dailyHistory": [
       {
         "day": "2026-11-14",
-        "live_calls": 23,
+        "live_calls": 27,
         "cached_or_demo": 1
       }
     ]
@@ -2007,8 +2167,8 @@
     "zip": "",
     "distance": 200,
     "stateFilter": "",
-    "lastAutoSyncAt": "2026-11-14T02:40:08.690Z",
-    "lastLiveSyncAt": "2026-11-14T02:39:57.867Z",
+    "lastAutoSyncAt": "2026-11-14T03:14:38.939Z",
+    "lastLiveSyncAt": "2026-11-14T03:14:34.920Z",
     "watchlistPresets": [
       {
         "id": "ioniq5-91311",
@@ -2082,12 +2242,26 @@
   },
   "cacheStatus": {
     "isStale": false,
-    "lastAutoSyncAt": "2026-11-14T02:40:08.690Z",
+    "lastAutoSyncAt": "2026-11-14T03:14:38.939Z",
     "syncIntervalHours": 24,
     "liveApiConfigured": true,
     "mode": "live"
   },
   "snapshots": [
+    {
+      "id": 5,
+      "started_at": "2026-11-14T03:14:34.920Z",
+      "completed_at": "2026-11-14T03:14:38.939Z",
+      "trigger_type": "cli",
+      "mode": "live",
+      "calls_used": 4,
+      "listings_fetched": 9,
+      "new_listings": 4,
+      "price_drops": 4,
+      "status": "completed",
+      "error_message": null,
+      "query_summary": "[daily since 2026-11-14T02:39:57] ioniq5-91311:p1, ioniq5-94107:p1, lucid-air-91311:p1, lucid-air-94107:p1"
+    },
     {
       "id": 4,
       "started_at": "2026-11-14T02:39:57.867Z",
@@ -2146,6 +2320,54 @@
     }
   ],
   "recentCalls": [
+    {
+      "id": 28,
+      "called_at": "2026-11-14T03:14:38.938Z",
+      "month_key": "2026-11",
+      "endpoint": "/listings",
+      "query_params": "vehicle.make=Lucid&vehicle.model=Air&vehicle.year=2025-2027&retailListing.price=1-50000&retailListing.used=true&zip=94107&distance=200&sort=updatedAt.desc&limit=20&page=1&updatedAt=2026-11-14T02%3A39%3A57-",
+      "status_code": 200,
+      "latency_ms": 347,
+      "rows_returned": 0,
+      "counted_against_quota": 1,
+      "trigger_type": "cli"
+    },
+    {
+      "id": 27,
+      "called_at": "2026-11-14T03:14:38.588Z",
+      "month_key": "2026-11",
+      "endpoint": "/listings",
+      "query_params": "vehicle.make=Lucid&vehicle.model=Air&vehicle.year=2025-2027&retailListing.price=1-50000&retailListing.used=true&zip=91311&distance=200&sort=updatedAt.desc&limit=20&page=1&updatedAt=2026-11-14T02%3A39%3A57-",
+      "status_code": 200,
+      "latency_ms": 810,
+      "rows_returned": 4,
+      "counted_against_quota": 1,
+      "trigger_type": "cli"
+    },
+    {
+      "id": 26,
+      "called_at": "2026-11-14T03:14:37.777Z",
+      "month_key": "2026-11",
+      "endpoint": "/listings",
+      "query_params": "vehicle.make=Hyundai&vehicle.model=Ioniq+5&vehicle.year=2025-2027&retailListing.price=1-50000&retailListing.used=true&zip=94107&distance=200&sort=updatedAt.desc&limit=20&page=1&updatedAt=2026-11-14T02%3A39%3A57-",
+      "status_code": 200,
+      "latency_ms": 1118,
+      "rows_returned": 1,
+      "counted_against_quota": 1,
+      "trigger_type": "cli"
+    },
+    {
+      "id": 25,
+      "called_at": "2026-11-14T03:14:36.592Z",
+      "month_key": "2026-11",
+      "endpoint": "/listings",
+      "query_params": "vehicle.make=Hyundai&vehicle.model=Ioniq+5&vehicle.year=2025-2027&retailListing.price=1-50000&retailListing.used=true&zip=91311&distance=200&sort=updatedAt.desc&limit=20&page=1&updatedAt=2026-11-14T02%3A39%3A57-",
+      "status_code": 200,
+      "latency_ms": 1669,
+      "rows_returned": 4,
+      "counted_against_quota": 1,
+      "trigger_type": "cli"
+    },
     {
       "id": 24,
       "called_at": "2026-11-14T02:40:08.688Z",
@@ -2334,54 +2556,6 @@
       "query_params": "vehicle.make=Hyundai&vehicle.model=Ioniq+5&vehicle.year=2025-2027&retailListing.price=1-50000&zip=91311&distance=200&sort=updatedAt.desc&limit=20&page=8",
       "status_code": 200,
       "latency_ms": 365,
-      "rows_returned": 20,
-      "counted_against_quota": 1,
-      "trigger_type": "cli"
-    },
-    {
-      "id": 8,
-      "called_at": "2026-11-14T02:40:02.285Z",
-      "month_key": "2026-11",
-      "endpoint": "/listings",
-      "query_params": "vehicle.make=Hyundai&vehicle.model=Ioniq+5&vehicle.year=2025-2027&retailListing.price=1-50000&zip=91311&distance=200&sort=updatedAt.desc&limit=20&page=7",
-      "status_code": 200,
-      "latency_ms": 391,
-      "rows_returned": 20,
-      "counted_against_quota": 1,
-      "trigger_type": "cli"
-    },
-    {
-      "id": 7,
-      "called_at": "2026-11-14T02:40:01.871Z",
-      "month_key": "2026-11",
-      "endpoint": "/listings",
-      "query_params": "vehicle.make=Hyundai&vehicle.model=Ioniq+5&vehicle.year=2025-2027&retailListing.price=1-50000&zip=91311&distance=200&sort=updatedAt.desc&limit=20&page=6",
-      "status_code": 200,
-      "latency_ms": 276,
-      "rows_returned": 20,
-      "counted_against_quota": 1,
-      "trigger_type": "cli"
-    },
-    {
-      "id": 6,
-      "called_at": "2026-11-14T02:40:01.579Z",
-      "month_key": "2026-11",
-      "endpoint": "/listings",
-      "query_params": "vehicle.make=Hyundai&vehicle.model=Ioniq+5&vehicle.year=2025-2027&retailListing.price=1-50000&zip=91311&distance=200&sort=updatedAt.desc&limit=20&page=5",
-      "status_code": 200,
-      "latency_ms": 284,
-      "rows_returned": 20,
-      "counted_against_quota": 1,
-      "trigger_type": "cli"
-    },
-    {
-      "id": 5,
-      "called_at": "2026-11-14T02:40:01.276Z",
-      "month_key": "2026-11",
-      "endpoint": "/listings",
-      "query_params": "vehicle.make=Hyundai&vehicle.model=Ioniq+5&vehicle.year=2025-2027&retailListing.price=1-50000&zip=91311&distance=200&sort=updatedAt.desc&limit=20&page=4",
-      "status_code": 200,
-      "latency_ms": 530,
       "rows_returned": 20,
       "counted_against_quota": 1,
       "trigger_type": "cli"
