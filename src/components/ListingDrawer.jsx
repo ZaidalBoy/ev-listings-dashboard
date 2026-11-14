@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { X, Star, ExternalLink, RefreshCw, MapPin, Gauge, Palette, Building2, Check } from 'lucide-react';
+import { X, Star, ExternalLink, RefreshCw, MapPin, Gauge, Palette, Building2, Check, Award } from 'lucide-react';
 import { formatCurrency, formatMiles, formatRelativeTime, getPriceDropAmount } from '../utils/formatters.js';
+import { IONIQ5_DIMENSIONS } from '../utils/evRanker.js';
 
 export default function ListingDrawer({
   listing,
+  rankingInfo,
   liveApiConfigured,
   onClose,
   onToggleStar,
@@ -150,6 +152,78 @@ export default function ListingDrawer({
             <span><strong>Dealer:</strong> {listing.dealer || '—'}</span>
           </div>
         </div>
+
+        {rankingInfo && (
+          <div
+            style={{
+              border: '1px solid var(--border-subtle)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '12px 14px',
+              background: rankingInfo.eligible ? 'var(--accent-ev-soft)' : 'var(--status-danger-bg)',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '8px',
+                marginBottom: '8px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700 }}>
+                <Award size={14} style={{ color: rankingInfo.eligible ? 'var(--accent-ev-dark)' : 'var(--status-danger)' }} />
+                <span>Ioniq 5 Ranker Assessment</span>
+              </div>
+              {rankingInfo.eligible ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span className={`badge ${rankingInfo.rank === 1 ? 'badge-rank-1' : rankingInfo.isTop5 ? 'badge-rank' : 'badge-cond'}`}>
+                    #{rankingInfo.rank}
+                  </span>
+                  <span className="badge badge-score mono">{rankingInfo.score.toFixed(1)} / 100</span>
+                </div>
+              ) : (
+                <span className="badge" style={{ background: 'var(--status-danger)', color: '#fff' }}>
+                  Disqualified
+                </span>
+              )}
+            </div>
+
+            {rankingInfo.eligible ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div style={{ fontSize: '11px', color: 'var(--ink-secondary)', marginBottom: '2px' }}>
+                  Est. EPA Range: <strong className="mono">{rankingInfo.epaRange} mi</strong> ({rankingInfo.normTrim} · {rankingInfo.normDrivetrain})
+                </div>
+                {IONIQ5_DIMENSIONS.map((dim) => {
+                  const b = rankingInfo.breakdown[dim.key];
+                  return (
+                    <div key={dim.key} className="score-mini-row">
+                      <span className="score-mini-label" style={{ width: '92px' }}>
+                        {dim.label} ({b.weightPct.toFixed(0)}%)
+                      </span>
+                      <div className="score-mini-track">
+                        <div
+                          className="score-mini-fill"
+                          style={{
+                            width: `${Math.max(4, b.subScore)}%`,
+                            background: dim.color,
+                          }}
+                        />
+                      </div>
+                      <span className="score-mini-val mono" style={{ width: '62px' }}>
+                        +{b.contribution.toFixed(1)} pts
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div style={{ fontSize: '12px', color: 'var(--status-danger)', fontWeight: 600 }}>
+                {rankingInfo.disqualifyReasons.join(' · ')}
+              </div>
+            )}
+          </div>
+        )}
 
         {Array.isArray(listing.price_history) && listing.price_history.length > 0 && (
           <div

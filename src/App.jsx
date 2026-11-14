@@ -15,8 +15,10 @@ import {
   Gauge,
   Activity,
   Upload,
+  Award,
 } from 'lucide-react';
 import QuotaAuditView from './components/QuotaAuditView.jsx';
+import TopPicksView from './components/TopPicksView.jsx';
 import SyncModal from './components/SyncModal.jsx';
 import ListingDrawer from './components/ListingDrawer.jsx';
 import {
@@ -30,6 +32,12 @@ import {
   findMatchingExistingLucid,
   parseLucidMhtml,
 } from './utils/lucidMhtmlParser.js';
+import {
+  RANKER_STORAGE_KEY,
+  cloneDefaultIoniq5Config,
+  rankIoniq5Listings,
+  sanitizeIoniq5Config,
+} from './utils/evRanker.js';
 
 const IS_STATIC_BUILD = import.meta.env.VITE_STATIC_MODE === 'true';
 const STATIC_BUILD_ID = import.meta.env.VITE_BUILD_ID || '';
@@ -68,14 +76,31 @@ function writeLocalLucidImport(payload) {
   } catch {}
 }
 
+function readRankerConfig() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(RANKER_STORAGE_KEY) || 'null');
+    return sanitizeIoniq5Config(parsed?.ioniq5);
+  } catch {
+    return cloneDefaultIoniq5Config();
+  }
+}
+
+function writeRankerConfig(ioniq5Config) {
+  try {
+    localStorage.setItem(RANKER_STORAGE_KEY, JSON.stringify({ ioniq5: ioniq5Config }));
+  } catch {}
+}
+
 export default function App() {
   const [rawStaticData, setRawStaticData] = useState(null);
   const [isStaticMode, setIsStaticMode] = useState(IS_STATIC_BUILD);
   const [staticPrefs, setStaticPrefs] = useState(() => readLocalPrefs());
   const [lucidImport, setLucidImport] = useState(() => readLocalLucidImport());
+  const [ioniq5Config, setIoniq5Config] = useState(() => readRankerConfig());
+  const [unfilteredServerListings, setUnfilteredServerListings] = useState(null);
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('inventory'); // 'inventory' | 'audit'
+  const [activeTab, setActiveTab] = useState('inventory'); // 'inventory' | 'top_picks' | 'audit'
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
 
   // Zero-call local SQLite filter state
@@ -104,8 +129,9 @@ export default function App() {
     }, 4500);
   }, []);
 
-  const applyStaticFilters = useCallback(
+  const buildStaticMerged = useCallback(
     (snapshot) => {
+      if (!snapshot) return [];
       const hasNewerLocalLucid =
         lucidImport &&
         (!snapshot.generatedAt || Date.parse(lucidImport.importedAt) > Date.parse(snapshot.generatedAt));
@@ -124,7 +150,7 @@ export default function App() {
         combinedListings = [...baseListings, ...extraDirect];
       }
 
-      const merged = combinedListings.map((l) => {
+      return combinedListings.map((l) => {
         const pref = staticPrefs[l.vin];
         return {
           ...l,
@@ -132,6 +158,13 @@ export default function App() {
           notes: pref?.notes !== undefined ? pref.notes : l.notes,
         };
       });
+    },
+    [staticPrefs, lucidImport]
+  );
+
+  const applyStaticFilters = useCallback(
+    (snapshot) => {
+      const merged = buildStaticMerged(snapshot);
 
       let filtered = merged.filter((l) => {
         if (q.trim()) {
@@ -159,7 +192,9 @@ export default function App() {
         year_desc: (a, b) => b.year - a.year || (a.price ?? 9e9) - (b.price ?? 9e9),
         drop_desc: (a, b) => getPriceDropAmount(b) - getPriceDropAmount(a),
       };
-      filtered = [...filtered].sort(sorters[sort] || sorters.updated_desc);
+      if (sort !== 'score_desc') {
+        filtered = [...filtered].sort(sorters[sort] || sorters.updated_desc);
+      }
 
       const priced = merged.filter((l) => l.price != null);
       const makeCounts = {};
@@ -173,6 +208,7 @@ export default function App() {
       return {
         ...snapshot,
         listings: filtered,
+        allListings: merged,
         facets: {
           ...snapshot.facets,
           makes: makeFacets,
@@ -190,7 +226,7 @@ export default function App() {
         },
       };
     },
-    [q, make, condition, sourceFilter, drivetrain, minYear, maxPrice, sort, onlyDrops, onlyNew, onlyStarred, staticPrefs, lucidImport]
+    [q, make, condition, sourceFilter, drivetrain, minYear, maxPrice, sort, onlyDrops, onlyNew, onlyStarred, buildStaticMerged]
   );
 
   const fetchDashboard = useCallback(async () => {
@@ -216,10 +252,14 @@ export default function App() {
     if (drivetrain) params.set('drivetrain', drivetrain);
     if (minYear) params.set('minYear', minYear);
     if (maxPrice) params.set('maxPrice', maxPrice);
-    if (sort) params.set('sort', sort);
+    if (sort && sort !== 'score_desc') params.set('sort', sort);
     if (onlyDrops) params.set('onlyDrops', 'true');
     if (onlyNew) params.set('onlyNew', 'true');
     if (onlyStarred) params.set('onlyStarred', 'true');
+
+    const hasFilters = Boolean(
+      q.trim() || make || condition || sourceFilter || drivetrain || minYear || maxPrice || onlyDrops || onlyNew || onlyStarred
+    );
 
     try {
       const res = await fetch(`/api/dashboard?${params.toString()}`);
@@ -227,6 +267,17 @@ export default function App() {
       const data = await res.json();
       setDashboard(data);
       setIsStaticMode(false);
+
+      if (!hasFilters) {
+        setUnfilteredServerListings(data.listings);
+      } else {
+        fetch('/api/dashboard')
+          .then((r) => (r.ok ? r.json() : null))
+          .then((full) => {
+            if (full?.listings) setUnfilteredServerListings(full.listings);
+          })
+          .catch(() => {});
+      }
     } catch {
       const res = await fetch(STATIC_SNAPSHOT_URL, { cache: 'no-cache' });
       const snap = await res.json();
@@ -276,10 +327,39 @@ export default function App() {
       .catch(() => {});
   }, [fetchDashboard, showToast, isStaticMode]);
 
+  const allUnfilteredListings = useMemo(() => {
+    if (isStaticMode) {
+      return dashboard?.allListings || buildStaticMerged(rawStaticData);
+    }
+    return unfilteredServerListings || dashboard?.listings || [];
+  }, [isStaticMode, dashboard, buildStaticMerged, rawStaticData, unfilteredServerListings]);
+
+  const ioniq5Ranking = useMemo(
+    () => rankIoniq5Listings(allUnfilteredListings, ioniq5Config),
+    [allUnfilteredListings, ioniq5Config]
+  );
+
+  const handleUpdateIoniq5Config = useCallback((nextConfig) => {
+    const sanitized = sanitizeIoniq5Config(nextConfig);
+    setIoniq5Config(sanitized);
+    writeRankerConfig(sanitized);
+  }, []);
+
+  const handleResetIoniq5Config = useCallback(() => {
+    const defaults = cloneDefaultIoniq5Config();
+    setIoniq5Config(defaults);
+    writeRankerConfig(defaults);
+    showToast('Ioniq 5 ranking weights and dealbreakers reset to defaults.');
+  }, [showToast]);
+
   const selectedListing = useMemo(() => {
-    if (!selectedVin || !dashboard?.listings) return null;
-    return dashboard.listings.find((l) => l.vin === selectedVin) || null;
-  }, [selectedVin, dashboard]);
+    if (!selectedVin) return null;
+    return (
+      dashboard?.listings?.find((l) => l.vin === selectedVin) ||
+      allUnfilteredListings.find((l) => l.vin === selectedVin) ||
+      null
+    );
+  }, [selectedVin, dashboard, allUnfilteredListings]);
 
   async function handleToggleStar(listing, e) {
     if (e) e.stopPropagation();
@@ -414,6 +494,19 @@ export default function App() {
     setOnlyStarred(false);
   }
 
+  const displayedListings = useMemo(() => {
+    const raw = dashboard?.listings || [];
+    if (sort !== 'score_desc') return raw;
+    return [...raw].sort((a, b) => {
+      const ra = ioniq5Ranking.byVin.get(a.vin);
+      const rb = ioniq5Ranking.byVin.get(b.vin);
+      const sa = ra?.eligible ? ra.score : ra ? -1 : -2;
+      const sb = rb?.eligible ? rb.score : rb ? -1 : -2;
+      if (sb !== sa) return sb - sa;
+      return (a.price ?? 9e9) - (b.price ?? 9e9);
+    });
+  }, [dashboard, sort, ioniq5Ranking]);
+
   if (loading || !dashboard) {
     return (
       <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', color: 'var(--ink-muted)' }}>
@@ -422,7 +515,7 @@ export default function App() {
     );
   }
 
-  const { listings, kpis, facets, quota, settings, cacheStatus, snapshots, recentCalls } = dashboard;
+  const { kpis, facets, quota, settings, cacheStatus, snapshots, recentCalls } = dashboard;
   const reserveMarkerPct = Math.max(
     0,
     Math.min(100, ((quota.cap - quota.reserveBuffer) / quota.cap) * 100)
@@ -637,7 +730,28 @@ export default function App() {
               className={`tab-btn ${activeTab === 'inventory' ? 'active' : ''}`}
               onClick={() => setActiveTab('inventory')}
             >
-              <LayoutGrid size={14} /> EV Inventory ({listings.length})
+              <LayoutGrid size={14} /> EV Inventory ({displayedListings.length})
+            </button>
+            <button
+              type="button"
+              className={`tab-btn ${activeTab === 'top_picks' ? 'active' : ''}`}
+              onClick={() => setActiveTab('top_picks')}
+            >
+              <Award size={14} /> Top 5 Picks
+              {ioniq5Ranking.top5.length > 0 && (
+                <span
+                  className="mono"
+                  style={{
+                    fontSize: '11px',
+                    padding: '1px 6px',
+                    borderRadius: '999px',
+                    background: 'var(--accent-ev-soft)',
+                    color: 'var(--accent-ev-dark)',
+                  }}
+                >
+                  Ioniq 5
+                </span>
+              )}
             </button>
             <button
               type="button"
@@ -675,7 +789,17 @@ export default function App() {
           )}
         </div>
 
-        {activeTab === 'audit' ? (
+        {activeTab === 'top_picks' ? (
+          <TopPicksView
+            allListings={allUnfilteredListings}
+            ioniq5Ranking={ioniq5Ranking}
+            ioniq5Config={ioniq5Config}
+            onUpdateIoniq5Config={handleUpdateIoniq5Config}
+            onResetIoniq5Config={handleResetIoniq5Config}
+            onSelectVin={setSelectedVin}
+            onToggleStar={handleToggleStar}
+          />
+        ) : activeTab === 'audit' ? (
           <QuotaAuditView
             quota={quota}
             settings={settings}
@@ -780,6 +904,7 @@ export default function App() {
                   onChange={(e) => setSort(e.target.value)}
                 >
                   <option value="updated_desc">Sort: Recently Updated</option>
+                  <option value="score_desc">Sort: Best Match Score (Ioniq 5)</option>
                   <option value="price_asc">Sort: Price Low → High</option>
                   <option value="price_desc">Sort: Price High → Low</option>
                   <option value="miles_asc">Sort: Lowest Mileage</option>
@@ -821,7 +946,7 @@ export default function App() {
               </div>
             </section>
 
-            {listings.length === 0 ? (
+            {displayedListings.length === 0 ? (
               <div className="empty-state">
                 <p style={{ margin: '0 0 10px', fontWeight: 600, color: 'var(--ink-primary)' }}>
                   No cached EV listings match your current filters.
@@ -832,9 +957,10 @@ export default function App() {
               </div>
             ) : viewMode === 'grid' ? (
               <section className="listings-grid" aria-label="EV Listings Grid">
-                {listings.map((item) => {
+                {displayedListings.map((item) => {
                   const drop = getPriceDropAmount(item);
                   const fresh = isNewToday(item);
+                  const rankInfo = ioniq5Ranking.byVin.get(item.vin);
                   return (
                     <article
                       key={item.vin}
@@ -860,6 +986,20 @@ export default function App() {
                           }}
                         />
                         <div className="card-badges">
+                          {rankInfo?.eligible && (
+                            <span
+                              className={`badge ${
+                                rankInfo.rank === 1
+                                  ? 'badge-rank-1'
+                                  : rankInfo.isTop5
+                                    ? 'badge-rank'
+                                    : 'badge-score'
+                              } mono`}
+                            >
+                              {rankInfo.isTop5 ? `#${rankInfo.rank} · ` : ''}
+                              {rankInfo.score.toFixed(1)}
+                            </span>
+                          )}
                           <span className="badge badge-cond">{item.condition}</span>
                           {fresh && <span className="badge badge-new">NEW 24H</span>}
                           {drop > 0 && (
@@ -885,7 +1025,10 @@ export default function App() {
                             <h3 className="card-title">
                               {item.year} {item.make} {item.model}
                             </h3>
-                            <p className="card-trim">{item.trim || item.body_style || 'Electric'}</p>
+                            <p className="card-trim">
+                              {item.trim || item.body_style || 'Electric'}
+                              {rankInfo?.epaRange ? ` · ${rankInfo.epaRange} mi EPA` : ''}
+                            </p>
                           </div>
                           <div className="card-price-block">
                             <div className="card-price">{formatCurrency(item.price)}</div>
@@ -936,6 +1079,7 @@ export default function App() {
                     <tr>
                       <th></th>
                       <th>Vehicle</th>
+                      <th>Score</th>
                       <th>Condition</th>
                       <th>Price</th>
                       <th>Delta</th>
@@ -946,8 +1090,9 @@ export default function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {listings.map((item) => {
+                    {displayedListings.map((item) => {
                       const drop = getPriceDropAmount(item);
+                      const rankInfo = ioniq5Ranking.byVin.get(item.vin);
                       return (
                         <tr key={item.vin} onClick={() => setSelectedVin(item.vin)}>
                           <td onClick={(e) => handleToggleStar(item, e)}>
@@ -964,6 +1109,25 @@ export default function App() {
                             <div style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>
                               {item.trim} · {item.dealer}
                             </div>
+                          </td>
+                          <td>
+                            {rankInfo?.eligible ? (
+                              <span
+                                className={`badge mono ${
+                                  rankInfo.rank === 1
+                                    ? 'badge-rank-1'
+                                    : rankInfo.isTop5
+                                      ? 'badge-rank'
+                                      : 'badge-score'
+                                }`}
+                              >
+                                #{rankInfo.rank} · {rankInfo.score.toFixed(1)}
+                              </span>
+                            ) : rankInfo ? (
+                              <span style={{ fontSize: '11px', color: 'var(--ink-muted)' }}>Excl.</span>
+                            ) : (
+                              '—'
+                            )}
                           </td>
                           <td>
                             <span className="badge badge-cond">{item.condition}</span>
@@ -1032,6 +1196,7 @@ export default function App() {
 
       <ListingDrawer
         listing={selectedListing}
+        rankingInfo={selectedListing ? ioniq5Ranking.byVin.get(selectedListing.vin) || null : null}
         liveApiConfigured={cacheStatus.liveApiConfigured}
         onClose={() => setSelectedVin(null)}
         onToggleStar={(listing) => handleToggleStar(listing)}
