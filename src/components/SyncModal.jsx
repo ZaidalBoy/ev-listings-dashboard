@@ -13,7 +13,8 @@ export default function SyncModal({
 }) {
   const [tab, setTab] = useState(initialTab);
   const [quickSingleCall, setQuickSingleCall] = useState(false);
-  const [pagesPerQuery, setPagesPerQuery] = useState(1);
+  const [syncProfile, setSyncProfile] = useState('auto');
+  const [pagesPerQuery, setPagesPerQuery] = useState('');
   const [zipOverride, setZipOverride] = useState(settings?.zip || '');
   const [stateOverride, setStateOverride] = useState(settings?.stateFilter || '');
   const [maxPriceOverride, setMaxPriceOverride] = useState('');
@@ -43,7 +44,8 @@ export default function SyncModal({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         quickSingleCall,
-        pagesPerQuery,
+        syncProfile,
+        pagesPerQuery: pagesPerQuery ? Number(pagesPerQuery) : undefined,
         zip: zipOverride.trim(),
         state: stateOverride.trim().toUpperCase(),
         maxPrice: maxPriceOverride ? Number(maxPriceOverride) : undefined,
@@ -59,7 +61,7 @@ export default function SyncModal({
     return () => {
       active = false;
     };
-  }, [isOpen, tab, quickSingleCall, pagesPerQuery, zipOverride, stateOverride, maxPriceOverride]);
+  }, [isOpen, tab, quickSingleCall, syncProfile, pagesPerQuery, zipOverride, stateOverride, maxPriceOverride]);
 
   if (!isOpen) return null;
 
@@ -71,7 +73,8 @@ export default function SyncModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           quickSingleCall,
-          pagesPerQuery,
+          syncProfile,
+          pagesPerQuery: pagesPerQuery ? Number(pagesPerQuery) : undefined,
           zip: zipOverride.trim(),
           state: stateOverride.trim().toUpperCase(),
           maxPrice: maxPriceOverride ? Number(maxPriceOverride) : undefined,
@@ -117,7 +120,7 @@ export default function SyncModal({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <div>
             <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>
-              Sync Planner & Quota Guardrails
+              Sync Planner &amp; Quota Guardrails
             </h2>
             <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--ink-muted)' }}>
               Preview exact Auto.dev API call costs before syncing (previewing uses 0 calls).
@@ -141,7 +144,7 @@ export default function SyncModal({
             className={`tab-btn ${tab === 'settings' ? 'active' : ''}`}
             onClick={() => setTab('settings')}
           >
-            <Sliders size={14} /> Cadence & Presets
+            <Sliders size={14} /> Cadence &amp; Presets
           </button>
         </div>
 
@@ -163,7 +166,7 @@ export default function SyncModal({
               <div>
                 {cacheStatus.liveApiConfigured ? (
                   <>
-                    <strong>Live Auto.dev API Connected:</strong> Running sync will send real requests and count toward your 1,000/month Free Tier cap.
+                    <strong>Live Auto.dev API Connected:</strong> Running sync will send real requests and count toward your 1,000/month Free Tier cap (stops early per preset if a page has &lt;20 results).
                   </>
                 ) : (
                   <>
@@ -173,7 +176,7 @@ export default function SyncModal({
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
               <label style={{ display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '12px', fontWeight: 600 }}>
                 Sync Scope
                 <select
@@ -181,20 +184,36 @@ export default function SyncModal({
                   value={quickSingleCall ? 'quick' : 'presets'}
                   onChange={(e) => setQuickSingleCall(e.target.value === 'quick')}
                 >
-                  <option value="presets">Enabled EV Watchlist Presets</option>
-                  <option value="quick">1-Call Quick Refresh (20 EVs max)</option>
+                  <option value="presets">Enabled Watchlist Presets</option>
+                  <option value="quick">1-Call Quick Refresh (20 EVs)</option>
                 </select>
               </label>
 
               <label style={{ display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '12px', fontWeight: 600 }}>
-                Pages per Query (20 listings/page on Free)
+                Sync Profile
+                <select
+                  className="select-control"
+                  value={syncProfile}
+                  onChange={(e) => setSyncProfile(e.target.value)}
+                >
+                  <option value="auto">Auto (10p Day-1 → 3p Daily)</option>
+                  <option value="backfill">Backfill (10 pages/preset)</option>
+                  <option value="daily">Daily Delta (3p + updatedAt)</option>
+                </select>
+              </label>
+
+              <label style={{ display: 'flex', flexDirection: 'column', gap: '5px', fontSize: '12px', fontWeight: 600 }}>
+                Pages Override (20/page)
                 <select
                   className="select-control"
                   value={pagesPerQuery}
-                  onChange={(e) => setPagesPerQuery(Number(e.target.value))}
+                  onChange={(e) => setPagesPerQuery(e.target.value)}
                 >
-                  <option value={1}>1 page per query (Recommended)</option>
-                  <option value={2}>2 pages per query (2× calls)</option>
+                  <option value="">Profile default</option>
+                  <option value="1">1 page / preset</option>
+                  <option value="3">3 pages / preset</option>
+                  <option value="5">5 pages / preset</option>
+                  <option value="10">10 pages / preset</option>
                 </select>
               </label>
             </div>

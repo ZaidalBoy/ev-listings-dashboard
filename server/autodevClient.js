@@ -16,6 +16,13 @@ export function hasLiveApiKey() {
   return Boolean(getApiKey());
 }
 
+export function formatAutoDevTimestamp(isoString) {
+  const d = new Date(isoString);
+  if (Number.isNaN(d.getTime())) return null;
+  // Auto.dev expects YYYY-MM-DDTHH:MM:SS (UTC, no milliseconds or trailing Z)
+  return d.toISOString().slice(0, 19);
+}
+
 async function throttleRateLimit() {
   const now = Date.now();
   const elapsed = now - lastRequestAt;
@@ -173,6 +180,32 @@ export function upsertListingRecord(db, normalized, source = 'autodev') {
   return { isNew, isPriceDrop };
 }
 
+export function resolveSyncProfile(db, options = {}) {
+  const settings = getSettings(db);
+  const requested = options.syncProfile || 'auto';
+  const hasPreviousLiveSync = Boolean(settings.lastLiveSyncAt);
+  const resolvedProfile =
+    requested === 'auto' ? (hasPreviousLiveSync ? 'daily' : 'backfill') : requested;
+
+  const defaultPages =
+    resolvedProfile === 'backfill' ? settings.backfillPagesPerPreset : settings.dailyPagesPerPreset;
+  const pagesPerQuery = options.pagesPerQuery
+    ? Math.min(15, Math.max(1, Number(options.pagesPerQuery)))
+    : defaultPages;
+
+  // On Day 2+ daily incremental runs, filter by updatedAt >= lastLiveSyncAt to skip unchanged cars
+  const updatedSince =
+    resolvedProfile === 'daily' && settings.lastLiveSyncAt
+      ? formatAutoDevTimestamp(settings.lastLiveSyncAt)
+      : null;
+
+  return {
+    syncProfile: resolvedProfile,
+    pagesPerQuery,
+    updatedSince,
+  };
+}
+
 export function buildSyncPlan(db, options = {}) {
   const settings = getSettings(db);
   const quota = getQuotaSummary(db);
@@ -184,8 +217,10 @@ export function buildSyncPlan(db, options = {}) {
       ? settings.watchlistPresets.filter((p) => options.presetIds.includes(p.id))
       : enabledPresets;
 
-  const pagesPerQuery = Math.min(3, Math.max(1, Number(options.pagesPerQuery) || 1));
-  const rawCallCount = selectedPresets.length * pagesPerQuery;
+  const { syncProfile, pagesPerQuery, updatedSince } = resolveSyncProfile(db, options);
+  const effectivePages = options.quickSingleCall ? 1 : pagesPerQuery;
+
+  const rawCallCount = selectedPresets.length * effectivePages;
   const maxAllowedForSync = Math.min(settings.maxCallsPerSync, rawCallCount);
 
   const isAutomated = options.triggerType === 'auto_daily' || options.triggerType === 'cli';
@@ -196,16 +231,19 @@ export function buildSyncPlan(db, options = {}) {
 
   const queries = [];
   outer: for (const preset of selectedPresets) {
-    for (let page = 1; page <= pagesPerQuery; page++) {
+    for (let page = 1; page <= effectivePages; page++) {
       if (queries.length >= callsPlanned) break outer;
       const params = {
         ...preset.params,
         limit: 20, // Free tier max limit
         page,
       };
-      if (options.zip ?? settings.zip) {
-        params.zip = options.zip ?? settings.zip;
-        params.distance = options.distance ?? settings.distance ?? 100;
+      if (updatedSince) {
+        params.updatedAt = `${updatedSince}-`;
+      }
+      if (options.zip) {
+        params.zip = options.zip;
+        params.distance = options.distance ?? settings.distance ?? 200;
       }
       if (options.state ?? settings.stateFilter) {
         params['retailListing.state'] = options.state ?? settings.stateFilter;
@@ -234,6 +272,9 @@ export function buildSyncPlan(db, options = {}) {
   return {
     liveApiConfigured: hasLiveApiKey(),
     mode: hasLiveApiKey() && !options.forceDemo ? 'live' : 'demo',
+    syncProfile,
+    pagesPerQuery: effectivePages,
+    updatedSince,
     triggerType: options.triggerType || 'manual',
     callsPlanned: queries.length,
     rawCallsRequested: rawCallCount,
@@ -249,7 +290,12 @@ export function buildSyncPlan(db, options = {}) {
   };
 }
 
-export async function callAutoDevEndpoint(db, endpointPath, queryObj = {}, { triggerType = 'manual', fetchImpl = fetch } = {}) {
+export async function callAutoDevEndpoint(
+  db,
+  endpointPath,
+  queryObj = {},
+  { triggerType = 'manual', fetchImpl = fetch } = {}
+) {
   const apiKey = getApiKey();
   if (!apiKey) {
     throw new Error('AUTODEV_API_KEY is not configured in environment.');
@@ -257,7 +303,9 @@ export async function callAutoDevEndpoint(db, endpointPath, queryObj = {}, { tri
 
   const quota = getQuotaSummary(db);
   if (quota.remaining <= 0) {
-    throw new Error(`Monthly quota exhausted (${quota.used}/${quota.cap}). Request blocked to protect Free tier limit.`);
+    throw new Error(
+      `Monthly quota exhausted (${quota.used}/${quota.cap}). Request blocked to protect Free tier limit.`
+    );
   }
 
   await throttleRateLimit();
@@ -363,7 +411,14 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
           hist.push({ price: newPrice, recordedAt: new Date().toISOString() });
           db.prepare(
             'UPDATE listings SET previous_price = ?, price = ?, updated_at = ?, last_seen_at = ?, price_history = ? WHERE vin = ?'
-          ).run(r.price, newPrice, new Date().toISOString(), new Date().toISOString(), JSON.stringify(hist), r.vin);
+          ).run(
+            r.price,
+            newPrice,
+            new Date().toISOString(),
+            new Date().toISOString(),
+            JSON.stringify(hist),
+            r.vin
+          );
           drops++;
         }
       }
@@ -371,7 +426,7 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
       updateSettings(db, { lastAutoSyncAt: new Date().toISOString() });
 
       const completedAt = new Date().toISOString();
-      const summary = `Demo snapshot refresh (${plan.queries.length} simulated calls, 0 real API credits used)`;
+      const summary = `Demo ${plan.syncProfile} refresh (${plan.queries.length} simulated calls, 0 real API credits used)`;
       const snapRes = db
         .prepare(
           `INSERT INTO sync_snapshots (started_at, completed_at, trigger_type, mode, calls_used, listings_fetched, new_listings, price_drops, status, error_message, query_summary)
@@ -387,25 +442,41 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
         listingsFetched: rows.length,
         newListings: 0,
         priceDrops: drops,
-        message: 'Simulated snapshot updated in Demo Mode (0 Auto.dev API credits used). Add AUTODEV_API_KEY in .env for live sync.',
+        message:
+          'Simulated snapshot updated in Demo Mode (0 Auto.dev API credits used). Add AUTODEV_API_KEY for live sync.',
       };
     }
 
-    // Live Auto.dev Sync
+    // Live Auto.dev Sync with smart early-stop per preset when a page returns < 20 rows
     let callsUsed = 0;
     let listingsFetched = 0;
     let newListings = 0;
     let priceDrops = 0;
+    let purgedSeedRows = false;
     const errors = [];
+    const exhaustedPresets = new Set();
+    const executedQueries = [];
 
     for (const q of plan.queries) {
+      if (exhaustedPresets.has(q.presetId)) {
+        continue;
+      }
+
       try {
         const res = await callAutoDevEndpoint(db, '/listings', q.params, {
           triggerType: plan.triggerType,
           fetchImpl,
         });
         callsUsed++;
+        executedQueries.push(`${q.presetId}:p${q.page}`);
         const items = Array.isArray(res?.data) ? res.data : [];
+
+        // On first live data arrival, clear demo seed listings so only real matches appear
+        if (!purgedSeedRows) {
+          db.prepare("DELETE FROM listings WHERE source = 'seed'").run();
+          purgedSeedRows = true;
+        }
+
         listingsFetched += items.length;
         for (const item of items) {
           const normalized = normalizeListingRow(item);
@@ -414,8 +485,14 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
           if (isNew) newListings++;
           if (isPriceDrop) priceDrops++;
         }
+
+        // Smart early-stop: Free tier max page size is 20; < 20 means no further pages exist
+        if (items.length < 20) {
+          exhaustedPresets.add(q.presetId);
+        }
       } catch (err) {
         callsUsed++;
+        executedQueries.push(`${q.presetId}:p${q.page}:err`);
         errors.push(`${q.presetLabel} (p${q.page}): ${err.message}`);
         if (err.status === 401 || err.status === 402 || err.status === 429) {
           break;
@@ -425,11 +502,17 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
 
     const completedAt = new Date().toISOString();
     if (callsUsed > 0 && errors.length < callsUsed) {
-      updateSettings(db, { lastAutoSyncAt: completedAt });
+      updateSettings(db, {
+        lastAutoSyncAt: completedAt,
+        lastLiveSyncAt: startedAt,
+      });
     }
 
-    const status = errors.length === 0 ? 'completed' : errors.length < callsUsed ? 'partial' : 'failed';
-    const summary = plan.queries.map((q) => `${q.presetId}:p${q.page}`).join(', ');
+    const status =
+      errors.length === 0 ? 'completed' : errors.length < callsUsed ? 'partial' : 'failed';
+    const summary = `[${plan.syncProfile}${
+      plan.updatedSince ? ` since ${plan.updatedSince}` : ''
+    }] ${executedQueries.join(', ')}`;
     const snapRes = db
       .prepare(
         `INSERT INTO sync_snapshots (started_at, completed_at, trigger_type, mode, calls_used, listings_fetched, new_listings, price_drops, status, error_message, query_summary)
@@ -451,8 +534,10 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
     return {
       status,
       mode: 'live',
+      syncProfile: plan.syncProfile,
       snapshotId: Number(snapRes.lastInsertRowid),
       callsUsed,
+      callsSavedByEarlyStop: Math.max(0, plan.queries.length - callsUsed),
       listingsFetched,
       newListings,
       priceDrops,

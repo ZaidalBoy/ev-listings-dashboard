@@ -6,6 +6,12 @@ on:
     - cron: '0 13 * * *'
   workflow_dispatch:
     inputs:
+      sync_profile:
+        description: 'Sync profile (auto = 10p Day-1 backfill, then 3p daily updatedAt delta)'
+        required: false
+        default: 'auto'
+        type: choice
+        options: ['auto', 'backfill', 'daily']
       force_sync:
         description: 'Force Auto.dev sync even if cache is <24h old'
         required: false
@@ -45,10 +51,11 @@ jobs:
         env:
           AUTODEV_API_KEY: ${{ secrets.AUTODEV_API_KEY }}
         run: |
+          PROFILE="${{ github.event.inputs.sync_profile || 'auto' }}"
           if [ "${{ github.event.inputs.force_sync }}" = "true" ]; then
-            node server/cli-sync.js --force
+            node server/cli-sync.js --force --profile="$PROFILE"
           else
-            node server/cli-sync.js
+            node server/cli-sync.js --profile="$PROFILE"
           fi
 
       - name: Export static snapshot JSON for GitHub Pages

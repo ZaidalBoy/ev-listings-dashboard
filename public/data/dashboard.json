@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T02:02:41.625Z",
+  "generatedAt": "2026-11-14T02:33:41.036Z",
   "staticSnapshot": true,
   "listings": [
     {
@@ -27,14 +27,14 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-13T22:35:01.048Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-14T00:35:01.048Z",
+      "first_seen_at": "2026-11-13T23:33:41.013Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-14T01:33:41.013Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 83900,
-          "recordedAt": "2026-11-14T00:35:01.048Z"
+          "recordedAt": "2026-11-14T01:33:41.013Z"
         }
       ]
     },
@@ -63,14 +63,14 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-13T22:35:01.022Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-14T00:35:01.022Z",
+      "first_seen_at": "2026-11-13T23:33:40.994Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-14T01:33:40.994Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 36400,
-          "recordedAt": "2026-11-14T00:35:01.022Z"
+          "recordedAt": "2026-11-14T01:33:40.994Z"
         }
       ]
     },
@@ -99,18 +99,18 @@
       "is_starred": true,
       "notes": "800V fast charging + CPO warranty extension.",
       "source": "seed",
-      "first_seen_at": "2026-11-07T01:35:01.001Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-14T00:35:01.001Z",
+      "first_seen_at": "2026-11-07T02:33:40.977Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-14T01:33:40.977Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 29990,
-          "recordedAt": "2026-11-08T01:35:01.001Z"
+          "recordedAt": "2026-11-08T02:33:40.977Z"
         },
         {
           "price": 28750,
-          "recordedAt": "2026-11-14T00:35:01.001Z"
+          "recordedAt": "2026-11-14T01:33:40.977Z"
         }
       ]
     },
@@ -139,14 +139,14 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-13T01:35:01.051Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T23:35:01.051Z",
+      "first_seen_at": "2026-11-13T02:33:41.015Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-14T00:33:41.015Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 41950,
-          "recordedAt": "2026-11-13T23:35:01.051Z"
+          "recordedAt": "2026-11-14T00:33:41.015Z"
         }
       ]
     },
@@ -175,18 +175,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-10T01:35:01.038Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T23:35:01.038Z",
+      "first_seen_at": "2026-11-10T02:33:41.006Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-14T00:33:41.006Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 55900,
-          "recordedAt": "2026-11-11T01:35:01.038Z"
+          "recordedAt": "2026-11-11T02:33:41.006Z"
         },
         {
           "price": 53800,
-          "recordedAt": "2026-11-13T23:35:01.038Z"
+          "recordedAt": "2026-11-14T00:33:41.006Z"
         }
       ]
     },
@@ -215,18 +215,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-10T01:35:01.019Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T23:35:01.019Z",
+      "first_seen_at": "2026-11-10T02:33:40.992Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-14T00:33:40.992Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 20900,
-          "recordedAt": "2026-11-11T01:35:01.019Z"
+          "recordedAt": "2026-11-11T02:33:40.992Z"
         },
         {
           "price": 19850,
-          "recordedAt": "2026-11-13T23:35:01.019Z"
+          "recordedAt": "2026-11-14T00:33:40.992Z"
         }
       ]
     },
@@ -255,14 +255,14 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-13T22:35:01.003Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T23:35:01.003Z",
+      "first_seen_at": "2026-11-13T23:33:40.980Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-14T00:33:40.980Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 34200,
-          "recordedAt": "2026-11-13T23:35:01.003Z"
+          "recordedAt": "2026-11-14T00:33:40.980Z"
         }
       ]
     },
@@ -291,14 +291,14 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-13T22:35:00.994Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T23:35:00.994Z",
+      "first_seen_at": "2026-11-13T23:33:40.969Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-14T00:33:40.969Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 38900,
-          "recordedAt": "2026-11-13T23:35:00.994Z"
+          "recordedAt": "2026-11-14T00:33:40.969Z"
         }
       ]
     },
@@ -327,18 +327,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-04T01:35:01.056Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T22:35:01.056Z",
+      "first_seen_at": "2026-11-04T02:33:41.020Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T23:33:41.020Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 33400,
-          "recordedAt": "2026-11-05T01:35:01.056Z"
+          "recordedAt": "2026-11-05T02:33:41.020Z"
         },
         {
           "price": 31900,
-          "recordedAt": "2026-11-13T22:35:01.056Z"
+          "recordedAt": "2026-11-13T23:33:41.020Z"
         }
       ]
     },
@@ -367,14 +367,14 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-13T22:35:01.034Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T22:35:01.034Z",
+      "first_seen_at": "2026-11-13T23:33:41.004Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T23:33:41.004Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 26300,
-          "recordedAt": "2026-11-13T22:35:01.034Z"
+          "recordedAt": "2026-11-13T23:33:41.004Z"
         }
       ]
     },
@@ -403,14 +403,14 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-13T01:35:01.008Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T22:35:01.008Z",
+      "first_seen_at": "2026-11-13T02:33:40.984Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T23:33:40.984Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 58900,
-          "recordedAt": "2026-11-13T22:35:01.008Z"
+          "recordedAt": "2026-11-13T23:33:40.984Z"
         }
       ]
     },
@@ -439,18 +439,18 @@
       "is_starred": true,
       "notes": "Clean 1-owner CA car; price dropped $1,710 this week.",
       "source": "seed",
-      "first_seen_at": "2026-11-08T01:35:00.990Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T22:35:00.990Z",
+      "first_seen_at": "2026-11-08T02:33:40.967Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T23:33:40.967Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 35200,
-          "recordedAt": "2026-11-09T01:35:00.990Z"
+          "recordedAt": "2026-11-09T02:33:40.967Z"
         },
         {
           "price": 33490,
-          "recordedAt": "2026-11-13T22:35:00.990Z"
+          "recordedAt": "2026-11-13T23:33:40.967Z"
         }
       ]
     },
@@ -479,18 +479,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-08T01:35:01.059Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T21:35:01.059Z",
+      "first_seen_at": "2026-11-08T02:33:41.023Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T22:33:41.023Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 62400,
-          "recordedAt": "2026-11-09T01:35:01.059Z"
+          "recordedAt": "2026-11-09T02:33:41.023Z"
         },
         {
           "price": 59900,
-          "recordedAt": "2026-11-13T21:35:01.059Z"
+          "recordedAt": "2026-11-13T22:33:41.023Z"
         }
       ]
     },
@@ -519,18 +519,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-06T01:35:01.040Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T21:35:01.040Z",
+      "first_seen_at": "2026-11-06T02:33:41.008Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T22:33:41.008Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 82900,
-          "recordedAt": "2026-11-07T01:35:01.040Z"
+          "recordedAt": "2026-11-07T02:33:41.008Z"
         },
         {
           "price": 79500,
-          "recordedAt": "2026-11-13T21:35:01.040Z"
+          "recordedAt": "2026-11-13T22:33:41.008Z"
         }
       ]
     },
@@ -559,18 +559,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-08T01:35:01.025Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T21:35:01.025Z",
+      "first_seen_at": "2026-11-08T02:33:40.996Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T22:33:40.996Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 57500,
-          "recordedAt": "2026-11-09T01:35:01.025Z"
+          "recordedAt": "2026-11-09T02:33:40.996Z"
         },
         {
           "price": 54900,
-          "recordedAt": "2026-11-13T21:35:01.025Z"
+          "recordedAt": "2026-11-13T22:33:40.996Z"
         }
       ]
     },
@@ -599,18 +599,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-09T01:35:01.014Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T21:35:01.014Z",
+      "first_seen_at": "2026-11-09T02:33:40.990Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T22:33:40.990Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 30900,
-          "recordedAt": "2026-11-10T01:35:01.014Z"
+          "recordedAt": "2026-11-10T02:33:40.990Z"
         },
         {
           "price": 29450,
-          "recordedAt": "2026-11-13T21:35:01.014Z"
+          "recordedAt": "2026-11-13T22:33:40.990Z"
         }
       ]
     },
@@ -639,18 +639,18 @@
       "is_starred": true,
       "notes": "Large Pack + Forest Green. Check battery health report.",
       "source": "seed",
-      "first_seen_at": "2026-11-09T01:35:00.997Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T21:35:00.997Z",
+      "first_seen_at": "2026-11-09T02:33:40.972Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T22:33:40.972Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 71000,
-          "recordedAt": "2026-11-10T01:35:00.997Z"
+          "recordedAt": "2026-11-10T02:33:40.972Z"
         },
         {
           "price": 68500,
-          "recordedAt": "2026-11-13T21:35:00.997Z"
+          "recordedAt": "2026-11-13T22:33:40.972Z"
         }
       ]
     },
@@ -679,18 +679,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-09T01:35:01.054Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T20:35:01.054Z",
+      "first_seen_at": "2026-11-09T02:33:41.018Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T21:33:41.018Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 44800,
-          "recordedAt": "2026-11-10T01:35:01.054Z"
+          "recordedAt": "2026-11-10T02:33:41.018Z"
         },
         {
           "price": 42400,
-          "recordedAt": "2026-11-13T20:35:01.054Z"
+          "recordedAt": "2026-11-13T21:33:41.018Z"
         }
       ]
     },
@@ -719,18 +719,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-11T01:35:01.028Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T20:35:01.028Z",
+      "first_seen_at": "2026-11-11T02:33:40.998Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T21:33:40.998Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 29400,
-          "recordedAt": "2026-11-12T01:35:01.028Z"
+          "recordedAt": "2026-11-12T02:33:40.998Z"
         },
         {
           "price": 27900,
-          "recordedAt": "2026-11-13T20:35:01.028Z"
+          "recordedAt": "2026-11-13T21:33:40.998Z"
         }
       ]
     },
@@ -759,18 +759,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-05T01:35:01.011Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T20:35:01.011Z",
+      "first_seen_at": "2026-11-05T02:33:40.987Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T21:33:40.987Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 50500,
-          "recordedAt": "2026-11-06T01:35:01.011Z"
+          "recordedAt": "2026-11-06T02:33:40.987Z"
         },
         {
           "price": 47990,
-          "recordedAt": "2026-11-13T20:35:01.011Z"
+          "recordedAt": "2026-11-13T21:33:40.987Z"
         }
       ]
     },
@@ -799,18 +799,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-10T01:35:00.999Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T20:35:00.999Z",
+      "first_seen_at": "2026-11-10T02:33:40.974Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T21:33:40.974Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 59900,
-          "recordedAt": "2026-11-11T01:35:00.999Z"
+          "recordedAt": "2026-11-11T02:33:40.974Z"
         },
         {
           "price": 57900,
-          "recordedAt": "2026-11-13T20:35:00.999Z"
+          "recordedAt": "2026-11-13T21:33:40.974Z"
         }
       ]
     },
@@ -839,18 +839,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-09T01:35:01.043Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T19:35:01.043Z",
+      "first_seen_at": "2026-11-09T02:33:41.010Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T20:33:41.010Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 18400,
-          "recordedAt": "2026-11-10T01:35:01.043Z"
+          "recordedAt": "2026-11-10T02:33:41.010Z"
         },
         {
           "price": 17490,
-          "recordedAt": "2026-11-13T19:35:01.043Z"
+          "recordedAt": "2026-11-13T20:33:41.010Z"
         }
       ]
     },
@@ -879,18 +879,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-07T01:35:01.031Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T19:35:01.031Z",
+      "first_seen_at": "2026-11-07T02:33:41.001Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T20:33:41.001Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 41200,
-          "recordedAt": "2026-11-08T01:35:01.031Z"
+          "recordedAt": "2026-11-08T02:33:41.001Z"
         },
         {
           "price": 39800,
-          "recordedAt": "2026-11-13T19:35:01.031Z"
+          "recordedAt": "2026-11-13T20:33:41.001Z"
         }
       ]
     },
@@ -919,18 +919,18 @@
       "is_starred": false,
       "notes": "",
       "source": "seed",
-      "first_seen_at": "2026-11-06T01:35:01.006Z",
-      "last_seen_at": "2026-11-14T01:35:00.990Z",
-      "updated_at": "2026-11-13T19:35:01.006Z",
+      "first_seen_at": "2026-11-06T02:33:40.982Z",
+      "last_seen_at": "2026-11-14T02:33:40.967Z",
+      "updated_at": "2026-11-13T20:33:40.982Z",
       "removed_at": null,
       "price_history": [
         {
           "price": 33250,
-          "recordedAt": "2026-11-07T01:35:01.006Z"
+          "recordedAt": "2026-11-07T02:33:40.982Z"
         },
         {
           "price": 31800,
-          "recordedAt": "2026-11-13T19:35:01.006Z"
+          "recordedAt": "2026-11-13T20:33:40.982Z"
         }
       ]
     }
@@ -942,7 +942,7 @@
     "priceDropsCount": 17,
     "newTodayCount": 5,
     "starredCount": 3,
-    "lastCacheUpdate": "2026-11-14T01:35:00.990Z"
+    "lastCacheUpdate": "2026-11-14T02:33:40.967Z"
   },
   "facets": {
     "makes": [
@@ -1062,7 +1062,7 @@
     "safeDailyBudget": 58.8,
     "dailyHistory": [
       {
-        "day": "2026-11-13",
+        "day": "2026-11-14",
         "live_calls": 0,
         "cached_or_demo": 1
       }
@@ -1073,56 +1073,75 @@
     "syncIntervalHours": 24,
     "monthlyCap": 1000,
     "reserveBuffer": 50,
-    "maxCallsPerSync": 5,
+    "maxCallsPerSync": 40,
+    "backfillPagesPerPreset": 10,
+    "dailyPagesPerPreset": 3,
     "zip": "",
-    "distance": 100,
+    "distance": 200,
     "stateFilter": "",
     "lastAutoSyncAt": "",
+    "lastLiveSyncAt": "",
     "watchlistPresets": [
       {
-        "id": "ev-pure-brands",
-        "label": "Pure EV Makers (Tesla, Rivian, Lucid, Polestar)",
-        "description": "Captures Tesla, Rivian, Lucid & Polestar listings in 1 consolidated call",
+        "id": "ioniq5-91311",
+        "label": "Hyundai Ioniq 5 · ZIP 91311 (+200 mi)",
+        "description": "2025+ Hyundai Ioniq 5 up to $50,000 within 200 mi of 91311, sorted by updatedAt.desc",
         "enabled": true,
         "params": {
-          "vehicle.make": "Tesla,Rivian,Lucid,Polestar",
-          "vehicle.fuel": "Electric",
+          "vehicle.make": "Hyundai",
+          "vehicle.model": "Ioniq 5",
+          "vehicle.year": "2025-2027",
+          "retailListing.price": "1-50000",
+          "zip": "91311",
+          "distance": 200,
           "sort": "updatedAt.desc",
           "limit": 20
         }
       },
       {
-        "id": "ev-korean-crossovers",
-        "label": "Hyundai & Kia EVs (Ioniq 5/6, EV6, EV9, Niro)",
-        "description": "High-demand E-GMP crossovers & sedans in 1 consolidated call",
+        "id": "ioniq5-94107",
+        "label": "Hyundai Ioniq 5 · ZIP 94107 (+200 mi)",
+        "description": "2025+ Hyundai Ioniq 5 up to $50,000 within 200 mi of 94107, sorted by updatedAt.desc",
         "enabled": true,
         "params": {
-          "vehicle.make": "Hyundai,Kia",
-          "vehicle.model": "Ioniq 5,Ioniq 6,EV6,EV9,Niro EV,Kona Electric",
+          "vehicle.make": "Hyundai",
+          "vehicle.model": "Ioniq 5",
+          "vehicle.year": "2025-2027",
+          "retailListing.price": "1-50000",
+          "zip": "94107",
+          "distance": 200,
           "sort": "updatedAt.desc",
           "limit": 20
         }
       },
       {
-        "id": "ev-us-oem",
-        "label": "US OEM EVs (Mach-E, Lightning, Bolt, Equinox, Blazer)",
-        "description": "Ford, Chevrolet & Cadillac EVs in 1 consolidated call",
+        "id": "lucid-air-91311",
+        "label": "Lucid Air · ZIP 91311 (+200 mi)",
+        "description": "2025+ Lucid Air up to $50,000 within 200 mi of 91311, sorted by updatedAt.desc",
         "enabled": true,
         "params": {
-          "vehicle.make": "Ford,Chevrolet,Cadillac",
-          "vehicle.model": "Mustang Mach-E,F-150 Lightning,Bolt EV,Bolt EUV,Equinox EV,Blazer EV,LYRIQ",
+          "vehicle.make": "Lucid",
+          "vehicle.model": "Air",
+          "vehicle.year": "2025-2027",
+          "retailListing.price": "1-50000",
+          "zip": "91311",
+          "distance": 200,
           "sort": "updatedAt.desc",
           "limit": 20
         }
       },
       {
-        "id": "ev-luxury-euro",
-        "label": "European EVs (BMW, Porsche, VW, Volvo, Audi)",
-        "description": "Optional 4th call for i4, iX, Taycan, ID.4, EX30 & Q4/Q8 e-tron",
-        "enabled": false,
+        "id": "lucid-air-94107",
+        "label": "Lucid Air · ZIP 94107 (+200 mi)",
+        "description": "2025+ Lucid Air up to $50,000 within 200 mi of 94107, sorted by updatedAt.desc",
+        "enabled": true,
         "params": {
-          "vehicle.make": "BMW,Porsche,Volkswagen,Volvo,Audi",
-          "vehicle.fuel": "Electric",
+          "vehicle.make": "Lucid",
+          "vehicle.model": "Air",
+          "vehicle.year": "2025-2027",
+          "retailListing.price": "1-50000",
+          "zip": "94107",
+          "distance": 200,
           "sort": "updatedAt.desc",
           "limit": 20
         }
@@ -1139,8 +1158,8 @@
   "snapshots": [
     {
       "id": 3,
-      "started_at": "2026-11-13T23:35:01.066Z",
-      "completed_at": "2026-11-13T23:35:01.066Z",
+      "started_at": "2026-11-14T00:33:41.030Z",
+      "completed_at": "2026-11-14T00:33:41.030Z",
       "trigger_type": "seed",
       "mode": "demo",
       "calls_used": 0,
@@ -1153,8 +1172,8 @@
     },
     {
       "id": 2,
-      "started_at": "2026-11-13T01:35:01.064Z",
-      "completed_at": "2026-11-13T01:35:01.064Z",
+      "started_at": "2026-11-13T02:33:41.028Z",
+      "completed_at": "2026-11-13T02:33:41.028Z",
       "trigger_type": "seed",
       "mode": "demo",
       "calls_used": 0,
@@ -1167,8 +1186,8 @@
     },
     {
       "id": 1,
-      "started_at": "2026-11-12T01:35:01.061Z",
-      "completed_at": "2026-11-12T01:35:01.061Z",
+      "started_at": "2026-11-12T02:33:41.025Z",
+      "completed_at": "2026-11-12T02:33:41.025Z",
       "trigger_type": "seed",
       "mode": "demo",
       "calls_used": 0,
@@ -1183,7 +1202,7 @@
   "recentCalls": [
     {
       "id": 1,
-      "called_at": "2026-11-13T23:35:01.069Z",
+      "called_at": "2026-11-14T00:33:41.032Z",
       "month_key": "2026-11",
       "endpoint": "/listings [DEMO SEED]",
       "query_params": "vehicle.fuel=Electric&limit=20",
