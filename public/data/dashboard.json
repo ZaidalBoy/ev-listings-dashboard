@@ -1,0 +1,1197 @@
+{
+  "generatedAt": "2026-11-14T02:02:41.625Z",
+  "staticSnapshot": true,
+  "listings": [
+    {
+      "vin": "7G2CEHED2RA014820",
+      "year": 2024,
+      "make": "Tesla",
+      "model": "Cybertruck",
+      "trim": "All-Wheel Drive",
+      "body_style": "Pickup Truck",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Stainless Steel",
+      "interior_color": "Tactical Gray",
+      "price": 83900,
+      "previous_price": null,
+      "miles": 3400,
+      "condition": "used",
+      "dealer": "Apex EV Showroom",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78704",
+      "vdp_url": "https://www.auto.dev/listings/7G2CEHED2RA014820",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_truck_slate.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-13T22:35:01.048Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-14T00:35:01.048Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 83900,
+          "recordedAt": "2026-11-14T00:35:01.048Z"
+        }
+      ]
+    },
+    {
+      "vin": "3GN7DMRP7RS241890",
+      "year": 2024,
+      "make": "Chevrolet",
+      "model": "Equinox EV",
+      "trim": "2RS AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Riptide Blue",
+      "interior_color": "Black/Red",
+      "price": 36400,
+      "previous_price": null,
+      "miles": 12,
+      "condition": "new",
+      "dealer": "Harbor Chevrolet",
+      "city": "Boston",
+      "state": "MA",
+      "zip": "02116",
+      "vdp_url": "https://www.auto.dev/listings/3GN7DMRP7RS241890",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-13T22:35:01.022Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-14T00:35:01.022Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 36400,
+          "recordedAt": "2026-11-14T00:35:01.022Z"
+        }
+      ]
+    },
+    {
+      "vin": "KM8KRDAF8PU198432",
+      "year": 2023,
+      "make": "Hyundai",
+      "model": "Ioniq 5",
+      "trim": "SEL AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Digital Teal",
+      "interior_color": "Gray",
+      "price": 28750,
+      "previous_price": 29990,
+      "miles": 21300,
+      "condition": "cpo",
+      "dealer": "South Bay Hyundai",
+      "city": "Torrance",
+      "state": "CA",
+      "zip": "90501",
+      "vdp_url": "https://www.auto.dev/listings/KM8KRDAF8PU198432",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": true,
+      "notes": "800V fast charging + CPO warranty extension.",
+      "source": "seed",
+      "first_seen_at": "2026-11-07T01:35:01.001Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-14T00:35:01.001Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 29990,
+          "recordedAt": "2026-11-08T01:35:01.001Z"
+        },
+        {
+          "price": 28750,
+          "recordedAt": "2026-11-14T00:35:01.001Z"
+        }
+      ]
+    },
+    {
+      "vin": "YV4ED3GM7RL041928",
+      "year": 2024,
+      "make": "Volvo",
+      "model": "EX30",
+      "trim": "Twin Motor Performance",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Moss Yellow",
+      "interior_color": "Pine",
+      "price": 41950,
+      "previous_price": null,
+      "miles": 18,
+      "condition": "new",
+      "dealer": "Volvo Cars Manhattan",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10019",
+      "vdp_url": "https://www.auto.dev/listings/YV4ED3GM7RL041928",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-13T01:35:01.051Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T23:35:01.051Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 41950,
+          "recordedAt": "2026-11-13T23:35:01.051Z"
+        }
+      ]
+    },
+    {
+      "vin": "1GYKPMRK4RZ109234",
+      "year": 2024,
+      "make": "Cadillac",
+      "model": "LYRIQ",
+      "trim": "Luxury AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Emerald Lake",
+      "interior_color": "Sky Cool Gray",
+      "price": 53800,
+      "previous_price": 55900,
+      "miles": 5400,
+      "condition": "used",
+      "dealer": "Palm Beach Cadillac",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "zip": "33401",
+      "vdp_url": "https://www.auto.dev/listings/1GYKPMRK4RZ109234",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-10T01:35:01.038Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T23:35:01.038Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 55900,
+          "recordedAt": "2026-11-11T01:35:01.038Z"
+        },
+        {
+          "price": 53800,
+          "recordedAt": "2026-11-13T23:35:01.038Z"
+        }
+      ]
+    },
+    {
+      "vin": "1G1FZ6S06P4119382",
+      "year": 2023,
+      "make": "Chevrolet",
+      "model": "Bolt EUV",
+      "trim": "Premier",
+      "body_style": "SUV",
+      "drivetrain": "FWD",
+      "fuel": "Electric",
+      "exterior_color": "Silver Flare",
+      "interior_color": "Dark Ash",
+      "price": 19850,
+      "previous_price": 20900,
+      "miles": 17340,
+      "condition": "used",
+      "dealer": "Sonoran Chevy",
+      "city": "Scottsdale",
+      "state": "AZ",
+      "zip": "85251",
+      "vdp_url": "https://www.auto.dev/listings/1G1FZ6S06P4119382",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-10T01:35:01.019Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T23:35:01.019Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 20900,
+          "recordedAt": "2026-11-11T01:35:01.019Z"
+        },
+        {
+          "price": 19850,
+          "recordedAt": "2026-11-13T23:35:01.019Z"
+        }
+      ]
+    },
+    {
+      "vin": "KMHM34AC5RA072109",
+      "year": 2024,
+      "make": "Hyundai",
+      "model": "Ioniq 6",
+      "trim": "Limited RWD",
+      "body_style": "Sedan",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Curated Silver",
+      "interior_color": "Black",
+      "price": 34200,
+      "previous_price": null,
+      "miles": 7820,
+      "condition": "used",
+      "dealer": "Austin Metro Hyundai",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78701",
+      "vdp_url": "https://www.auto.dev/listings/KMHM34AC5RA072109",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_sedan_silver.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-13T22:35:01.003Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T23:35:01.003Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 34200,
+          "recordedAt": "2026-11-13T23:35:01.003Z"
+        }
+      ]
+    },
+    {
+      "vin": "5YJ3E1EB9RF704118",
+      "year": 2024,
+      "make": "Tesla",
+      "model": "Model 3",
+      "trim": "Long Range Highland AWD",
+      "body_style": "Sedan",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Quicksilver",
+      "interior_color": "Black",
+      "price": 38900,
+      "previous_price": null,
+      "miles": 6150,
+      "condition": "cpo",
+      "dealer": "Pacific Coast Motors",
+      "city": "San Jose",
+      "state": "CA",
+      "zip": "95112",
+      "vdp_url": "https://www.auto.dev/listings/5YJ3E1EB9RF704118",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_sedan_silver.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-13T22:35:00.994Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T23:35:00.994Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 38900,
+          "recordedAt": "2026-11-13T23:35:00.994Z"
+        }
+      ]
+    },
+    {
+      "vin": "7SAYGDEF4NF490123",
+      "year": 2022,
+      "make": "Tesla",
+      "model": "Model Y",
+      "trim": "Performance AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Midnight Silver",
+      "interior_color": "Black",
+      "price": 31900,
+      "previous_price": 33400,
+      "miles": 28900,
+      "condition": "used",
+      "dealer": "Silicon Valley Auto Exchange",
+      "city": "Palo Alto",
+      "state": "CA",
+      "zip": "94301",
+      "vdp_url": "https://www.auto.dev/listings/7SAYGDEF4NF490123",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-04T01:35:01.056Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T22:35:01.056Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 33400,
+          "recordedAt": "2026-11-05T01:35:01.056Z"
+        },
+        {
+          "price": 31900,
+          "recordedAt": "2026-11-13T22:35:01.056Z"
+        }
+      ]
+    },
+    {
+      "vin": "1V2GNPE89PC034812",
+      "year": 2023,
+      "make": "Volkswagen",
+      "model": "ID.4",
+      "trim": "Pro S AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Aurora Red",
+      "interior_color": "Lunar Gray",
+      "price": 26300,
+      "previous_price": null,
+      "miles": 20100,
+      "condition": "used",
+      "dealer": "Sunshine VW",
+      "city": "Orlando",
+      "state": "FL",
+      "zip": "32801",
+      "vdp_url": "https://www.auto.dev/listings/1V2GNPE89PC034812",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-13T22:35:01.034Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T22:35:01.034Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 26300,
+          "recordedAt": "2026-11-13T22:35:01.034Z"
+        }
+      ]
+    },
+    {
+      "vin": "KNDACFS57R6019843",
+      "year": 2024,
+      "make": "Kia",
+      "model": "EV9",
+      "trim": "Land AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Ocean Green",
+      "interior_color": "Light Gray",
+      "price": 58900,
+      "previous_price": null,
+      "miles": 4120,
+      "condition": "used",
+      "dealer": "Tri-State Kia Showcase",
+      "city": "White Plains",
+      "state": "NY",
+      "zip": "10601",
+      "vdp_url": "https://www.auto.dev/listings/KNDACFS57R6019843",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-13T01:35:01.008Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T22:35:01.008Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 58900,
+          "recordedAt": "2026-11-13T22:35:01.008Z"
+        }
+      ]
+    },
+    {
+      "vin": "7SAYGDEE5PF812041",
+      "year": 2023,
+      "make": "Tesla",
+      "model": "Model Y",
+      "trim": "Long Range AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Pearl White Multi-Coat",
+      "interior_color": "Black",
+      "price": 33490,
+      "previous_price": 35200,
+      "miles": 18420,
+      "condition": "used",
+      "dealer": "Bay Area EV Collective",
+      "city": "Fremont",
+      "state": "CA",
+      "zip": "94538",
+      "vdp_url": "https://www.auto.dev/listings/7SAYGDEE5PF812041",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": true,
+      "notes": "Clean 1-owner CA car; price dropped $1,710 this week.",
+      "source": "seed",
+      "first_seen_at": "2026-11-08T01:35:00.990Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T22:35:00.990Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 35200,
+          "recordedAt": "2026-11-09T01:35:00.990Z"
+        },
+        {
+          "price": 33490,
+          "recordedAt": "2026-11-13T22:35:00.990Z"
+        }
+      ]
+    },
+    {
+      "vin": "WB523CF02PCM77812",
+      "year": 2023,
+      "make": "BMW",
+      "model": "iX",
+      "trim": "xDrive50",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Oxide Grey",
+      "interior_color": "Mocha",
+      "price": 59900,
+      "previous_price": 62400,
+      "miles": 14750,
+      "condition": "cpo",
+      "dealer": "BMW of Bellevue",
+      "city": "Bellevue",
+      "state": "WA",
+      "zip": "98005",
+      "vdp_url": "https://www.auto.dev/listings/WB523CF02PCM77812",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-08T01:35:01.059Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T21:35:01.059Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 62400,
+          "recordedAt": "2026-11-09T01:35:01.059Z"
+        },
+        {
+          "price": 59900,
+          "recordedAt": "2026-11-13T21:35:01.059Z"
+        }
+      ]
+    },
+    {
+      "vin": "WP0AB2Y10PSA42019",
+      "year": 2023,
+      "make": "Porsche",
+      "model": "Taycan",
+      "trim": "4S AWD",
+      "body_style": "Sedan",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Dolomite Silver",
+      "interior_color": "Black",
+      "price": 79500,
+      "previous_price": 82900,
+      "miles": 9320,
+      "condition": "cpo",
+      "dealer": "Porsche Irvine",
+      "city": "Irvine",
+      "state": "CA",
+      "zip": "92618",
+      "vdp_url": "https://www.auto.dev/listings/WP0AB2Y10PSA42019",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_sedan_silver.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-06T01:35:01.040Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T21:35:01.040Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 82900,
+          "recordedAt": "2026-11-07T01:35:01.040Z"
+        },
+        {
+          "price": 79500,
+          "recordedAt": "2026-11-13T21:35:01.040Z"
+        }
+      ]
+    },
+    {
+      "vin": "50EA1GBA4PA008412",
+      "year": 2023,
+      "make": "Lucid",
+      "model": "Air",
+      "trim": "Touring AWD",
+      "body_style": "Sedan",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Cosmos Silver",
+      "interior_color": "Mojave",
+      "price": 54900,
+      "previous_price": 57500,
+      "miles": 11200,
+      "condition": "used",
+      "dealer": "Beverly Hills Electric",
+      "city": "Beverly Hills",
+      "state": "CA",
+      "zip": "90210",
+      "vdp_url": "https://www.auto.dev/listings/50EA1GBA4PA008412",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_sedan_silver.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-08T01:35:01.025Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T21:35:01.025Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 57500,
+          "recordedAt": "2026-11-09T01:35:01.025Z"
+        },
+        {
+          "price": 54900,
+          "recordedAt": "2026-11-13T21:35:01.025Z"
+        }
+      ]
+    },
+    {
+      "vin": "3FMTK3SU9PMA48120",
+      "year": 2023,
+      "make": "Ford",
+      "model": "Mustang Mach-E",
+      "trim": "Premium AWD Extended",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Vapor Blue",
+      "interior_color": "Space Gray",
+      "price": 29450,
+      "previous_price": 30900,
+      "miles": 22190,
+      "condition": "cpo",
+      "dealer": "Mile High Ford",
+      "city": "Boulder",
+      "state": "CO",
+      "zip": "80302",
+      "vdp_url": "https://www.auto.dev/listings/3FMTK3SU9PMA48120",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-09T01:35:01.014Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T21:35:01.014Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 30900,
+          "recordedAt": "2026-11-10T01:35:01.014Z"
+        },
+        {
+          "price": 29450,
+          "recordedAt": "2026-11-13T21:35:01.014Z"
+        }
+      ]
+    },
+    {
+      "vin": "7PDSGABA4RN039214",
+      "year": 2024,
+      "make": "Rivian",
+      "model": "R1S",
+      "trim": "Dual-Motor Large Pack",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Forest Green",
+      "interior_color": "Ocean Coast",
+      "price": 68500,
+      "previous_price": 71000,
+      "miles": 9840,
+      "condition": "used",
+      "dealer": "Cascade Adventure Auto",
+      "city": "Bellevue",
+      "state": "WA",
+      "zip": "98004",
+      "vdp_url": "https://www.auto.dev/listings/7PDSGABA4RN039214",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": true,
+      "notes": "Large Pack + Forest Green. Check battery health report.",
+      "source": "seed",
+      "first_seen_at": "2026-11-09T01:35:00.997Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T21:35:00.997Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 71000,
+          "recordedAt": "2026-11-10T01:35:00.997Z"
+        },
+        {
+          "price": 68500,
+          "recordedAt": "2026-11-13T21:35:00.997Z"
+        }
+      ]
+    },
+    {
+      "vin": "3GNKDHRJ0RS182044",
+      "year": 2024,
+      "make": "Chevrolet",
+      "model": "Blazer EV",
+      "trim": "RS AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Sterling Gray",
+      "interior_color": "Adrenaline Red",
+      "price": 42400,
+      "previous_price": 44800,
+      "miles": 2150,
+      "condition": "used",
+      "dealer": "Great Lakes Chevrolet",
+      "city": "Chicago",
+      "state": "IL",
+      "zip": "60601",
+      "vdp_url": "https://www.auto.dev/listings/3GNKDHRJ0RS182044",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-09T01:35:01.054Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T20:35:01.054Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 44800,
+          "recordedAt": "2026-11-10T01:35:01.054Z"
+        },
+        {
+          "price": 42400,
+          "recordedAt": "2026-11-13T20:35:01.054Z"
+        }
+      ]
+    },
+    {
+      "vin": "LPSED3KA6PL118394",
+      "year": 2023,
+      "make": "Polestar",
+      "model": "2",
+      "trim": "Long Range Dual Motor",
+      "body_style": "Sedan",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Magnesium",
+      "interior_color": "Slate",
+      "price": 27900,
+      "previous_price": 29400,
+      "miles": 15670,
+      "condition": "cpo",
+      "dealer": "Polestar Seattle",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98101",
+      "vdp_url": "https://www.auto.dev/listings/LPSED3KA6PL118394",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_sedan_silver.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-11T01:35:01.028Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T20:35:01.028Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 29400,
+          "recordedAt": "2026-11-12T01:35:01.028Z"
+        },
+        {
+          "price": 27900,
+          "recordedAt": "2026-11-13T20:35:01.028Z"
+        }
+      ]
+    },
+    {
+      "vin": "1FT6W1EV8PWG21490",
+      "year": 2023,
+      "make": "Ford",
+      "model": "F-150 Lightning",
+      "trim": "Lariat Extended Range",
+      "body_style": "Pickup Truck",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Antimatter Blue",
+      "interior_color": "Slate",
+      "price": 47990,
+      "previous_price": 50500,
+      "miles": 16800,
+      "condition": "used",
+      "dealer": "Lone Star Ford Fleet",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75201",
+      "vdp_url": "https://www.auto.dev/listings/1FT6W1EV8PWG21490",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_truck_slate.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-05T01:35:01.011Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T20:35:01.011Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 50500,
+          "recordedAt": "2026-11-06T01:35:01.011Z"
+        },
+        {
+          "price": 47990,
+          "recordedAt": "2026-11-13T20:35:01.011Z"
+        }
+      ]
+    },
+    {
+      "vin": "7FCTGAAA2PN024891",
+      "year": 2023,
+      "make": "Rivian",
+      "model": "R1T",
+      "trim": "Quad-Motor Adventure",
+      "body_style": "Pickup Truck",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Rivian Blue",
+      "interior_color": "Black Mountain",
+      "price": 57900,
+      "previous_price": 59900,
+      "miles": 14210,
+      "condition": "used",
+      "dealer": "Front Range EVs",
+      "city": "Denver",
+      "state": "CO",
+      "zip": "80202",
+      "vdp_url": "https://www.auto.dev/listings/7FCTGAAA2PN024891",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_truck_slate.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-10T01:35:00.999Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T20:35:00.999Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 59900,
+          "recordedAt": "2026-11-11T01:35:00.999Z"
+        },
+        {
+          "price": 57900,
+          "recordedAt": "2026-11-13T20:35:00.999Z"
+        }
+      ]
+    },
+    {
+      "vin": "1N4AZ1CV8PC559201",
+      "year": 2023,
+      "make": "Nissan",
+      "model": "Leaf",
+      "trim": "SV Plus",
+      "body_style": "Hatchback",
+      "drivetrain": "FWD",
+      "fuel": "Electric",
+      "exterior_color": "Brilliant Silver",
+      "interior_color": "Black",
+      "price": 17490,
+      "previous_price": 18400,
+      "miles": 14900,
+      "condition": "used",
+      "dealer": "Valley Nissan",
+      "city": "Phoenix",
+      "state": "AZ",
+      "zip": "85004",
+      "vdp_url": "https://www.auto.dev/listings/1N4AZ1CV8PC559201",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_sedan_silver.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-09T01:35:01.043Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T19:35:01.043Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 18400,
+          "recordedAt": "2026-11-10T01:35:01.043Z"
+        },
+        {
+          "price": 17490,
+          "recordedAt": "2026-11-13T19:35:01.043Z"
+        }
+      ]
+    },
+    {
+      "vin": "WBY73AW08PFP42910",
+      "year": 2023,
+      "make": "BMW",
+      "model": "i4",
+      "trim": "eDrive40",
+      "body_style": "Sedan",
+      "drivetrain": "RWD",
+      "fuel": "Electric",
+      "exterior_color": "Mineral White",
+      "interior_color": "Cognac",
+      "price": 39800,
+      "previous_price": 41200,
+      "miles": 13400,
+      "condition": "cpo",
+      "dealer": "BMW of San Francisco",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94103",
+      "vdp_url": "https://www.auto.dev/listings/WBY73AW08PFP42910",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_sedan_silver.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-07T01:35:01.031Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T19:35:01.031Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 41200,
+          "recordedAt": "2026-11-08T01:35:01.031Z"
+        },
+        {
+          "price": 39800,
+          "recordedAt": "2026-11-13T19:35:01.031Z"
+        }
+      ]
+    },
+    {
+      "vin": "KNDC4DLC9P5128940",
+      "year": 2023,
+      "make": "Kia",
+      "model": "EV6",
+      "trim": "GT-Line AWD",
+      "body_style": "SUV",
+      "drivetrain": "AWD",
+      "fuel": "Electric",
+      "exterior_color": "Yacht Blue",
+      "interior_color": "Black/White",
+      "price": 31800,
+      "previous_price": 33250,
+      "miles": 19450,
+      "condition": "cpo",
+      "dealer": "Northwest Kia",
+      "city": "Portland",
+      "state": "OR",
+      "zip": "97209",
+      "vdp_url": "https://www.auto.dev/listings/KNDC4DLC9P5128940",
+      "carfax_url": "https://www.carfax.com",
+      "primary_image": "./images/ev_suv_emerald.jpg",
+      "is_starred": false,
+      "notes": "",
+      "source": "seed",
+      "first_seen_at": "2026-11-06T01:35:01.006Z",
+      "last_seen_at": "2026-11-14T01:35:00.990Z",
+      "updated_at": "2026-11-13T19:35:01.006Z",
+      "removed_at": null,
+      "price_history": [
+        {
+          "price": 33250,
+          "recordedAt": "2026-11-07T01:35:01.006Z"
+        },
+        {
+          "price": 31800,
+          "recordedAt": "2026-11-13T19:35:01.006Z"
+        }
+      ]
+    }
+  ],
+  "kpis": {
+    "totalListings": 24,
+    "avgPrice": 43578,
+    "minPrice": 17490,
+    "priceDropsCount": 17,
+    "newTodayCount": 5,
+    "starredCount": 3,
+    "lastCacheUpdate": "2026-11-14T01:35:00.990Z"
+  },
+  "facets": {
+    "makes": [
+      {
+        "make": "Tesla",
+        "count": 4
+      },
+      {
+        "make": "Chevrolet",
+        "count": 3
+      },
+      {
+        "make": "BMW",
+        "count": 2
+      },
+      {
+        "make": "Ford",
+        "count": 2
+      },
+      {
+        "make": "Hyundai",
+        "count": 2
+      },
+      {
+        "make": "Kia",
+        "count": 2
+      },
+      {
+        "make": "Rivian",
+        "count": 2
+      },
+      {
+        "make": "Cadillac",
+        "count": 1
+      },
+      {
+        "make": "Lucid",
+        "count": 1
+      },
+      {
+        "make": "Nissan",
+        "count": 1
+      },
+      {
+        "make": "Polestar",
+        "count": 1
+      },
+      {
+        "make": "Porsche",
+        "count": 1
+      },
+      {
+        "make": "Volkswagen",
+        "count": 1
+      },
+      {
+        "make": "Volvo",
+        "count": 1
+      }
+    ],
+    "states": [
+      {
+        "state": "CA",
+        "count": 7
+      },
+      {
+        "state": "TX",
+        "count": 3
+      },
+      {
+        "state": "WA",
+        "count": 3
+      },
+      {
+        "state": "AZ",
+        "count": 2
+      },
+      {
+        "state": "CO",
+        "count": 2
+      },
+      {
+        "state": "FL",
+        "count": 2
+      },
+      {
+        "state": "NY",
+        "count": 2
+      },
+      {
+        "state": "IL",
+        "count": 1
+      },
+      {
+        "state": "MA",
+        "count": 1
+      },
+      {
+        "state": "OR",
+        "count": 1
+      }
+    ]
+  },
+  "quota": {
+    "monthKey": "2026-11",
+    "used": 0,
+    "cap": 1000,
+    "remaining": 1000,
+    "reserveBuffer": 50,
+    "autoSyncBudgetRemaining": 950,
+    "pctUsed": 0,
+    "dayOfMonth": 14,
+    "daysInMonth": 30,
+    "daysRemaining": 17,
+    "dailyBurnRate": 0,
+    "projectedMonthEnd": 0,
+    "safeDailyBudget": 58.8,
+    "dailyHistory": [
+      {
+        "day": "2026-11-13",
+        "live_calls": 0,
+        "cached_or_demo": 1
+      }
+    ]
+  },
+  "settings": {
+    "syncMode": "daily_auto",
+    "syncIntervalHours": 24,
+    "monthlyCap": 1000,
+    "reserveBuffer": 50,
+    "maxCallsPerSync": 5,
+    "zip": "",
+    "distance": 100,
+    "stateFilter": "",
+    "lastAutoSyncAt": "",
+    "watchlistPresets": [
+      {
+        "id": "ev-pure-brands",
+        "label": "Pure EV Makers (Tesla, Rivian, Lucid, Polestar)",
+        "description": "Captures Tesla, Rivian, Lucid & Polestar listings in 1 consolidated call",
+        "enabled": true,
+        "params": {
+          "vehicle.make": "Tesla,Rivian,Lucid,Polestar",
+          "vehicle.fuel": "Electric",
+          "sort": "updatedAt.desc",
+          "limit": 20
+        }
+      },
+      {
+        "id": "ev-korean-crossovers",
+        "label": "Hyundai & Kia EVs (Ioniq 5/6, EV6, EV9, Niro)",
+        "description": "High-demand E-GMP crossovers & sedans in 1 consolidated call",
+        "enabled": true,
+        "params": {
+          "vehicle.make": "Hyundai,Kia",
+          "vehicle.model": "Ioniq 5,Ioniq 6,EV6,EV9,Niro EV,Kona Electric",
+          "sort": "updatedAt.desc",
+          "limit": 20
+        }
+      },
+      {
+        "id": "ev-us-oem",
+        "label": "US OEM EVs (Mach-E, Lightning, Bolt, Equinox, Blazer)",
+        "description": "Ford, Chevrolet & Cadillac EVs in 1 consolidated call",
+        "enabled": true,
+        "params": {
+          "vehicle.make": "Ford,Chevrolet,Cadillac",
+          "vehicle.model": "Mustang Mach-E,F-150 Lightning,Bolt EV,Bolt EUV,Equinox EV,Blazer EV,LYRIQ",
+          "sort": "updatedAt.desc",
+          "limit": 20
+        }
+      },
+      {
+        "id": "ev-luxury-euro",
+        "label": "European EVs (BMW, Porsche, VW, Volvo, Audi)",
+        "description": "Optional 4th call for i4, iX, Taycan, ID.4, EX30 & Q4/Q8 e-tron",
+        "enabled": false,
+        "params": {
+          "vehicle.make": "BMW,Porsche,Volkswagen,Volvo,Audi",
+          "vehicle.fuel": "Electric",
+          "sort": "updatedAt.desc",
+          "limit": 20
+        }
+      }
+    ]
+  },
+  "cacheStatus": {
+    "isStale": true,
+    "lastAutoSyncAt": null,
+    "syncIntervalHours": 24,
+    "liveApiConfigured": false,
+    "mode": "demo"
+  },
+  "snapshots": [
+    {
+      "id": 3,
+      "started_at": "2026-11-13T23:35:01.066Z",
+      "completed_at": "2026-11-13T23:35:01.066Z",
+      "trigger_type": "seed",
+      "mode": "demo",
+      "calls_used": 0,
+      "listings_fetched": 24,
+      "new_listings": 4,
+      "price_drops": 5,
+      "status": "completed",
+      "error_message": null,
+      "query_summary": "Today EV snapshot (demo mode — add AUTODEV_API_KEY in .env for live sync)"
+    },
+    {
+      "id": 2,
+      "started_at": "2026-11-13T01:35:01.064Z",
+      "completed_at": "2026-11-13T01:35:01.064Z",
+      "trigger_type": "seed",
+      "mode": "demo",
+      "calls_used": 0,
+      "listings_fetched": 22,
+      "new_listings": 2,
+      "price_drops": 6,
+      "status": "completed",
+      "error_message": null,
+      "query_summary": "Daily EV delta snapshot (demo mode — 0 live API credits used)"
+    },
+    {
+      "id": 1,
+      "started_at": "2026-11-12T01:35:01.061Z",
+      "completed_at": "2026-11-12T01:35:01.061Z",
+      "trigger_type": "seed",
+      "mode": "demo",
+      "calls_used": 0,
+      "listings_fetched": 20,
+      "new_listings": 20,
+      "price_drops": 0,
+      "status": "completed",
+      "error_message": null,
+      "query_summary": "Initial EV market seed (3 consolidated preset queries)"
+    }
+  ],
+  "recentCalls": [
+    {
+      "id": 1,
+      "called_at": "2026-11-13T23:35:01.069Z",
+      "month_key": "2026-11",
+      "endpoint": "/listings [DEMO SEED]",
+      "query_params": "vehicle.fuel=Electric&limit=20",
+      "status_code": 200,
+      "latency_ms": 12,
+      "rows_returned": 24,
+      "counted_against_quota": 0,
+      "trigger_type": "seed"
+    }
+  ]
+}

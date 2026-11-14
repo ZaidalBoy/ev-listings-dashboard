@@ -1,0 +1,88 @@
+name: Daily EV Sync & GitHub Pages Deploy
+
+on:
+  schedule:
+    # Runs once per day at 13:00 UTC (5:00 AM PST / 6:00 AM PDT)
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+    inputs:
+      force_sync:
+        description: 'Force Auto.dev sync even if cache is <24h old'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+  push:
+    branches: ['main']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  sync-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Daily Auto.dev Sync (only on schedule or manual trigger)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          AUTODEV_API_KEY: ${{ secrets.AUTODEV_API_KEY }}
+        run: |
+          if [ "${{ github.event.inputs.force_sync }}" = "true" ]; then
+            node server/cli-sync.js --force
+          else
+            node server/cli-sync.js
+          fi
+
+      - name: Export static snapshot JSON for GitHub Pages
+        env:
+          AUTODEV_API_KEY: ${{ secrets.AUTODEV_API_KEY }}
+        run: npm run export:static
+
+      - name: Commit updated SQLite & snapshot back to main
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ev_dashboard.db public/data/dashboard.json
+          git diff --staged --quiet || git commit -m "chore: daily EV snapshot update"
+          git push
+
+      - name: Build static Vite bundle for GitHub Pages
+        env:
+          VITE_STATIC_MODE: 'true'
+          VITE_BASE_PATH: '/${{ github.event.repository.name }}/'
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: sync-and-build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
