@@ -39,6 +39,7 @@ export function createApp({ dbPath } = {}) {
       q = '',
       make = '',
       condition = '',
+      drivetrain = '',
       source = '',
       state = '',
       maxPrice = '',
@@ -54,9 +55,11 @@ export function createApp({ dbPath } = {}) {
     const params = [];
 
     if (q) {
-      where.push('(make LIKE ? OR model LIKE ? OR trim LIKE ? OR vin LIKE ? OR city LIKE ? OR dealer LIKE ?)');
+      where.push(
+        '(make LIKE ? OR model LIKE ? OR trim LIKE ? OR drivetrain LIKE ? OR exterior_color LIKE ? OR vin LIKE ? OR city LIKE ? OR dealer LIKE ?)'
+      );
       const like = `%${String(q).trim()}%`;
-      params.push(like, like, like, like, like, like);
+      params.push(like, like, like, like, like, like, like, like);
     }
     if (make) {
       where.push('make = ?');
@@ -65,6 +68,10 @@ export function createApp({ dbPath } = {}) {
     if (condition) {
       where.push('condition = ?');
       params.push(String(condition));
+    }
+    if (drivetrain) {
+      where.push('UPPER(drivetrain) = ?');
+      params.push(String(drivetrain).toUpperCase());
     }
     if (source) {
       where.push('source = ?');

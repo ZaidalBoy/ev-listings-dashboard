@@ -83,7 +83,7 @@ export default function App() {
   const [make, setMake] = useState('');
   const [condition, setCondition] = useState('');
   const [sourceFilter, setSourceFilter] = useState('');
-  const [stateCode, setStateCode] = useState('');
+  const [drivetrain, setDrivetrain] = useState('');
   const [minYear, setMinYear] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [sort, setSort] = useState('updated_desc');
@@ -135,13 +135,14 @@ export default function App() {
 
       let filtered = merged.filter((l) => {
         if (q.trim()) {
-          const hay = `${l.make} ${l.model} ${l.trim} ${l.vin} ${l.city} ${l.dealer}`.toLowerCase();
+          const hay =
+            `${l.make} ${l.model} ${l.trim} ${l.drivetrain} ${l.exterior_color} ${l.vin} ${l.city} ${l.dealer}`.toLowerCase();
           if (!hay.includes(q.trim().toLowerCase())) return false;
         }
         if (make && l.make !== make) return false;
         if (condition && l.condition !== condition) return false;
         if (sourceFilter && l.source !== sourceFilter) return false;
-        if (stateCode && l.state !== stateCode) return false;
+        if (drivetrain && String(l.drivetrain || '').toUpperCase() !== drivetrain) return false;
         if (minYear && Number(minYear) > 0 && Number(l.year) < Number(minYear)) return false;
         if (maxPrice && Number(maxPrice) > 0 && (l.price == null || l.price > Number(maxPrice))) return false;
         if (onlyStarred && !l.is_starred) return false;
@@ -189,7 +190,7 @@ export default function App() {
         },
       };
     },
-    [q, make, condition, sourceFilter, stateCode, minYear, maxPrice, sort, onlyDrops, onlyNew, onlyStarred, staticPrefs, lucidImport]
+    [q, make, condition, sourceFilter, drivetrain, minYear, maxPrice, sort, onlyDrops, onlyNew, onlyStarred, staticPrefs, lucidImport]
   );
 
   const fetchDashboard = useCallback(async () => {
@@ -212,7 +213,7 @@ export default function App() {
     if (make) params.set('make', make);
     if (condition) params.set('condition', condition);
     if (sourceFilter) params.set('source', sourceFilter);
-    if (stateCode) params.set('state', stateCode);
+    if (drivetrain) params.set('drivetrain', drivetrain);
     if (minYear) params.set('minYear', minYear);
     if (maxPrice) params.set('maxPrice', maxPrice);
     if (sort) params.set('sort', sort);
@@ -239,7 +240,7 @@ export default function App() {
     make,
     condition,
     sourceFilter,
-    stateCode,
+    drivetrain,
     minYear,
     maxPrice,
     sort,
@@ -404,7 +405,7 @@ export default function App() {
     setMake('');
     setCondition('');
     setSourceFilter('');
-    setStateCode('');
+    setDrivetrain('');
     setMinYear('');
     setMaxPrice('');
     setSort('updated_desc');
@@ -427,7 +428,7 @@ export default function App() {
     Math.min(100, ((quota.cap - quota.reserveBuffer) / quota.cap) * 100)
   );
   const hasActiveFilters = Boolean(
-    q || make || condition || sourceFilter || stateCode || minYear || maxPrice || onlyDrops || onlyNew || onlyStarred
+    q || make || condition || sourceFilter || drivetrain || minYear || maxPrice || onlyDrops || onlyNew || onlyStarred
   );
 
   return (
@@ -692,7 +693,7 @@ export default function App() {
                   <input
                     id="ev-search-input"
                     className="input-control"
-                    placeholder="Search model, make, trim, VIN, city, dealer..."
+                    placeholder="Search model, trim, AWD/RWD, color, VIN, dealer..."
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                   />
@@ -725,6 +726,17 @@ export default function App() {
                 </select>
 
                 <select
+                  id="ev-drivetrain-select"
+                  className="select-control"
+                  value={drivetrain}
+                  onChange={(e) => setDrivetrain(e.target.value)}
+                >
+                  <option value="">All Drivetrains</option>
+                  <option value="AWD">AWD</option>
+                  <option value="RWD">RWD</option>
+                </select>
+
+                <select
                   id="ev-source-select"
                   className="select-control"
                   value={sourceFilter}
@@ -745,20 +757,6 @@ export default function App() {
                   <option value="2025">2025+ Only</option>
                   <option value="2024">2024+</option>
                   <option value="2023">2023+</option>
-                </select>
-
-                <select
-                  id="ev-state-select"
-                  className="select-control"
-                  value={stateCode}
-                  onChange={(e) => setStateCode(e.target.value)}
-                >
-                  <option value="">All States</option>
-                  {facets.states.map((s) => (
-                    <option key={s.state} value={s.state}>
-                      {s.state} ({s.count})
-                    </option>
-                  ))}
                 </select>
 
                 <select
