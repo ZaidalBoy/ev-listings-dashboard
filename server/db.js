@@ -12,13 +12,14 @@ export const DEFAULT_WATCHLIST_PRESETS = [
   {
     id: 'ioniq5-91311',
     label: 'Hyundai Ioniq 5 · ZIP 91311 (+200 mi)',
-    description: '2025+ Hyundai Ioniq 5 up to $50,000 within 200 mi of 91311, sorted by updatedAt.desc',
+    description: 'Used & CPO 2025+ Hyundai Ioniq 5 up to $50,000 within 200 mi of 91311, sorted by updatedAt.desc',
     enabled: true,
     params: {
       'vehicle.make': 'Hyundai',
       'vehicle.model': 'Ioniq 5',
       'vehicle.year': `2025-${MAX_MODEL_YEAR}`,
       'retailListing.price': '1-50000',
+      'retailListing.used': 'true',
       zip: '91311',
       distance: 200,
       sort: 'updatedAt.desc',
@@ -28,13 +29,14 @@ export const DEFAULT_WATCHLIST_PRESETS = [
   {
     id: 'ioniq5-94107',
     label: 'Hyundai Ioniq 5 · ZIP 94107 (+200 mi)',
-    description: '2025+ Hyundai Ioniq 5 up to $50,000 within 200 mi of 94107, sorted by updatedAt.desc',
+    description: 'Used & CPO 2025+ Hyundai Ioniq 5 up to $50,000 within 200 mi of 94107, sorted by updatedAt.desc',
     enabled: true,
     params: {
       'vehicle.make': 'Hyundai',
       'vehicle.model': 'Ioniq 5',
       'vehicle.year': `2025-${MAX_MODEL_YEAR}`,
       'retailListing.price': '1-50000',
+      'retailListing.used': 'true',
       zip: '94107',
       distance: 200,
       sort: 'updatedAt.desc',
@@ -44,13 +46,14 @@ export const DEFAULT_WATCHLIST_PRESETS = [
   {
     id: 'lucid-air-91311',
     label: 'Lucid Air · ZIP 91311 (+200 mi)',
-    description: '2025+ Lucid Air up to $50,000 within 200 mi of 91311, sorted by updatedAt.desc',
+    description: 'Used & CPO 2025+ Lucid Air up to $50,000 within 200 mi of 91311, sorted by updatedAt.desc',
     enabled: true,
     params: {
       'vehicle.make': 'Lucid',
       'vehicle.model': 'Air',
       'vehicle.year': `2025-${MAX_MODEL_YEAR}`,
       'retailListing.price': '1-50000',
+      'retailListing.used': 'true',
       zip: '91311',
       distance: 200,
       sort: 'updatedAt.desc',
@@ -60,13 +63,14 @@ export const DEFAULT_WATCHLIST_PRESETS = [
   {
     id: 'lucid-air-94107',
     label: 'Lucid Air · ZIP 94107 (+200 mi)',
-    description: '2025+ Lucid Air up to $50,000 within 200 mi of 94107, sorted by updatedAt.desc',
+    description: 'Used & CPO 2025+ Lucid Air up to $50,000 within 200 mi of 94107, sorted by updatedAt.desc',
     enabled: true,
     params: {
       'vehicle.make': 'Lucid',
       'vehicle.model': 'Air',
       'vehicle.year': `2025-${MAX_MODEL_YEAR}`,
       'retailListing.price': '1-50000',
+      'retailListing.used': 'true',
       zip: '94107',
       distance: 200,
       sort: 'updatedAt.desc',

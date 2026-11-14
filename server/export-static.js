@@ -88,6 +88,11 @@ const recentCalls = db.prepare('SELECT * FROM api_call_log ORDER BY id DESC LIMI
 const settings = getSettings(db);
 const quota = getQuotaSummary(db);
 
+const hasLiveListings = Boolean(
+  db.prepare("SELECT 1 FROM listings WHERE source = 'autodev' LIMIT 1").get()
+);
+const isLiveSnapshot = hasLiveApiKey() || hasLiveListings;
+
 const payload = {
   generatedAt: new Date().toISOString(),
   staticSnapshot: true,
@@ -111,8 +116,8 @@ const payload = {
     isStale: isCacheStale(db),
     lastAutoSyncAt: settings.lastAutoSyncAt || null,
     syncIntervalHours: settings.syncIntervalHours,
-    liveApiConfigured: hasLiveApiKey(),
-    mode: hasLiveApiKey() ? 'live' : 'demo',
+    liveApiConfigured: isLiveSnapshot,
+    mode: isLiveSnapshot ? 'live' : 'demo',
   },
   snapshots,
   recentCalls,
