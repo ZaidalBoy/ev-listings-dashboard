@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T21:14:10.029Z",
+  "generatedAt": "2026-11-20T20:57:24.596Z",
   "staticSnapshot": true,
   "listings": [
     {
@@ -6082,12 +6082,12 @@
     "reserveBuffer": 50,
     "autoSyncBudgetRemaining": 886,
     "pctUsed": 6.4,
-    "dayOfMonth": 19,
+    "dayOfMonth": 20,
     "daysInMonth": 30,
-    "daysRemaining": 12,
-    "dailyBurnRate": 3.37,
-    "projectedMonthEnd": 101,
-    "safeDailyBudget": 78,
+    "daysRemaining": 11,
+    "dailyBurnRate": 3.2,
+    "projectedMonthEnd": 96,
+    "safeDailyBudget": 85.1,
     "dailyHistory": [
       {
         "day": "2026-11-14",
