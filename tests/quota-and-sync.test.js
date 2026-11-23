@@ -299,3 +299,197 @@ test('parseLucidMhtml and importLucidHtmlToDb decode MHTML, deduplicate Auto.dev
   assert.equal(rows[1].vin, 'LUCID-9100005651');
   assert.equal(getQuotaSummary(db).used, 0);
 });
+
+test('clean full backfill stamps missing autodev rows as removed_at, preserves stars/notes/lucid_direct, and skips on daily or error runs', async () => {
+  const db = createDatabase(':memory:');
+  process.env.AUTODEV_API_KEY = 'test-key';
+
+  const makeApiListing = (vin, model) => ({
+    vin,
+    createdAt: '2026-11-12T10:00:00Z',
+    updatedAt: '2026-11-12T10:00:00Z',
+    vehicle: {
+      year: 2025,
+      make: model === 'Air' ? 'Lucid' : 'Hyundai',
+      model,
+      trim: 'Limited',
+      bodyStyle: model === 'Air' ? 'SUV' : 'SUV',
+      fuel: 'Electric',
+    },
+    retailListing: {
+      price: 41000,
+      miles: 4000,
+      used: true,
+      cpo: false,
+      dealer: 'Test EV',
+      city: 'San Jose',
+      state: 'CA',
+      zip: '94107',
+    },
+  });
+
+  // Seed two autodev cars (one starred with notes) + one lucid_direct car
+  upsertListingRecord(db, normalizeListingRow(makeApiListing('AUTODEVACTIVE0001', 'Ioniq 5')), 'autodev');
+  upsertListingRecord(db, normalizeListingRow(makeApiListing('AUTODEVSOLD000002', 'Ioniq 5')), 'autodev');
+  db.prepare('UPDATE listings SET is_starred = 1, notes = ? WHERE vin = ?').run('My top pick', 'AUTODEVSOLD000002');
+  upsertListingRecord(
+    db,
+    {
+      vin: 'LUCID-DIRECT-KEEP',
+      year: 2025,
+      make: 'Lucid',
+      model: 'Air',
+      trim: 'Pure',
+      bodyStyle: 'Sedan',
+      drivetrain: 'RWD',
+      fuel: 'Electric',
+      exteriorColor: '',
+      interiorColor: '',
+      price: 44000,
+      miles: 8000,
+      condition: 'used',
+      dealer: 'Lucid Direct',
+      city: 'Los Angeles',
+      state: 'CA',
+      zip: '90001',
+      vdpUrl: '',
+      carfaxUrl: '',
+      primaryImage: '',
+      createdAt: '2026-11-12T10:00:00Z',
+      updatedAt: '2026-11-12T10:00:00Z',
+      removedAt: null,
+      rawJson: '{}',
+    },
+    'lucid_direct'
+  );
+
+  try {
+    // 1. Daily sync returning only 1 car must NOT mark AUTODEVSOLD000002 sold
+    const dailyFetch = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ data: [makeApiListing('AUTODEVACTIVE0001', 'Ioniq 5')] }),
+    });
+    const dailyRes = await executeSync(db, { triggerType: 'cli', syncProfile: 'daily' }, dailyFetch);
+    assert.equal(dailyRes.cleanFullBackfill, false);
+    assert.equal(dailyRes.markedSold, 0);
+    assert.equal(
+      db.prepare('SELECT removed_at FROM listings WHERE vin = ?').get('AUTODEVSOLD000002').removed_at,
+      null
+    );
+
+    // 2. Backfill with an API error on one preset must NOT mark AUTODEVSOLD000002 sold
+    let errCall = 0;
+    const partialErrorFetch = async () => {
+      errCall++;
+      if (errCall === 4) {
+        return { ok: false, status: 500, json: async () => ({ error: 'boom' }) };
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ data: [makeApiListing('AUTODEVACTIVE0001', 'Ioniq 5')] }),
+      };
+    };
+    const errRes = await executeSync(db, { triggerType: 'cli', syncProfile: 'backfill' }, partialErrorFetch);
+    assert.equal(errRes.cleanFullBackfill, false);
+    assert.equal(errRes.markedSold, 0);
+    assert.equal(
+      db.prepare('SELECT removed_at FROM listings WHERE vin = ?').get('AUTODEVSOLD000002').removed_at,
+      null
+    );
+
+    // 3. Clean full backfill stamps AUTODEVSOLD000002 as removed_at, preserves star+notes, and leaves lucid_direct active
+    const cleanFetch = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ data: [makeApiListing('AUTODEVACTIVE0001', 'Ioniq 5')] }),
+    });
+    const cleanRes = await executeSync(db, { triggerType: 'cli', syncProfile: 'backfill' }, cleanFetch);
+    assert.equal(cleanRes.cleanFullBackfill, true);
+    assert.equal(cleanRes.markedSold, 1);
+
+    const soldRow = db
+      .prepare('SELECT removed_at, is_starred, notes FROM listings WHERE vin = ?')
+      .get('AUTODEVSOLD000002');
+    assert.ok(soldRow.removed_at);
+    assert.equal(soldRow.is_starred, 1);
+    assert.equal(soldRow.notes, 'My top pick');
+    assert.equal(
+      db.prepare('SELECT removed_at FROM listings WHERE vin = ?').get('LUCID-DIRECT-KEEP').removed_at,
+      null
+    );
+
+    // 4. If AUTODEVSOLD000002 re-appears in a future sync, removed_at clears automatically
+    const returnFetch = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        data: [
+          makeApiListing('AUTODEVACTIVE0001', 'Ioniq 5'),
+          makeApiListing('AUTODEVSOLD000002', 'Ioniq 5'),
+        ],
+      }),
+    });
+    await executeSync(db, { triggerType: 'cli', syncProfile: 'backfill' }, returnFetch);
+    assert.equal(
+      db.prepare('SELECT removed_at FROM listings WHERE vin = ?').get('AUTODEVSOLD000002').removed_at,
+      null
+    );
+  } finally {
+    delete process.env.AUTODEV_API_KEY;
+  }
+});
+
+test('API dashboard hides removed_at by default, supports showSold=true, and toggles removed_at via PATCH', async () => {
+  const { createApp } = await import('../server/index.js');
+  const { app } = createApp({ dbPath: ':memory:' });
+  const server = await new Promise((resolve) => {
+    const s = app.listen(0, '127.0.0.1', () => resolve(s));
+  });
+
+  try {
+    const { port } = server.address();
+    const baseUrl = `http://127.0.0.1:${port}`;
+
+    const initial = await (await fetch(`${baseUrl}/api/dashboard`)).json();
+    const initialCount = initial.listings.length;
+    assert.ok(initialCount > 0);
+    assert.equal(initial.kpis.soldCount, 0);
+
+    const targetVin = initial.listings[0].vin;
+    const markRes = await fetch(`${baseUrl}/api/listings/${targetVin}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ removed_at: '2026-11-23T00:00:00.000Z' }),
+    });
+    assert.equal(markRes.status, 200);
+
+    const hiddenDash = await (await fetch(`${baseUrl}/api/dashboard`)).json();
+    assert.equal(hiddenDash.listings.length, initialCount - 1);
+    assert.equal(hiddenDash.kpis.totalListings, initialCount - 1);
+    assert.equal(hiddenDash.kpis.soldCount, 1);
+    assert.equal(hiddenDash.listings.some((l) => l.vin === targetVin), false);
+
+    const shownDash = await (await fetch(`${baseUrl}/api/dashboard?showSold=true`)).json();
+    assert.equal(shownDash.listings.length, initialCount);
+    assert.equal(shownDash.kpis.totalListings, initialCount - 1);
+    assert.equal(shownDash.kpis.soldCount, 1);
+    assert.ok(shownDash.listings.find((l) => l.vin === targetVin)?.removed_at);
+
+    // Restore back to active
+    const restoreRes = await fetch(`${baseUrl}/api/listings/${targetVin}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ removed_at: null }),
+    });
+    assert.equal(restoreRes.status, 200);
+
+    const restoredDash = await (await fetch(`${baseUrl}/api/dashboard`)).json();
+    assert.equal(restoredDash.listings.length, initialCount);
+    assert.equal(restoredDash.kpis.soldCount, 0);
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
+});
+

@@ -590,10 +590,31 @@ textarea {
   color: #ffffff;
 }
 
-.star-btn {
+.badge-sold {
+  background: #dc2626;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.listing-card.is-sold {
+  opacity: 0.72;
+  border-style: dashed;
+}
+
+.data-table tbody tr.is-sold {
+  opacity: 0.68;
+}
+
+.card-top-actions {
   position: absolute;
   top: 10px;
   right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.star-btn {
   width: 32px;
   height: 32px;
   border-radius: 999px;
@@ -603,7 +624,7 @@ textarea {
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: transform 0.12s ease, color 0.15s ease;
+  transition: transform 0.12s ease, color 0.15s ease, background-color 0.15s ease;
 }
 
 .star-btn:hover {
@@ -613,6 +634,15 @@ textarea {
 
 .star-btn.starred {
   color: #d97706;
+}
+
+.sold-toggle-btn:hover {
+  color: #dc2626;
+}
+
+.sold-toggle-btn.is-sold {
+  color: #0f766e;
+  background: rgba(240, 253, 250, 0.95);
 }
 
 .card-body {

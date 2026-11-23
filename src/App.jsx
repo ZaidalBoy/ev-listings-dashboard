@@ -16,6 +16,8 @@ import {
   Activity,
   Upload,
   Award,
+  EyeOff,
+  RotateCcw,
 } from 'lucide-react';
 import QuotaAuditView from './components/QuotaAuditView.jsx';
 import TopPicksView from './components/TopPicksView.jsx';
@@ -115,6 +117,7 @@ export default function App() {
   const [onlyDrops, setOnlyDrops] = useState(false);
   const [onlyNew, setOnlyNew] = useState(false);
   const [onlyStarred, setOnlyStarred] = useState(false);
+  const [showSold, setShowSold] = useState(false);
 
   const [syncModalState, setSyncModalState] = useState({ open: false, tab: 'sync' });
   const [selectedVin, setSelectedVin] = useState(null);
@@ -156,6 +159,7 @@ export default function App() {
           ...l,
           is_starred: pref?.is_starred !== undefined ? pref.is_starred : l.is_starred,
           notes: pref?.notes !== undefined ? pref.notes : l.notes,
+          removed_at: pref?.removed_at !== undefined ? pref.removed_at : l.removed_at,
         };
       });
     },
@@ -165,8 +169,11 @@ export default function App() {
   const applyStaticFilters = useCallback(
     (snapshot) => {
       const merged = buildStaticMerged(snapshot);
+      const activeMerged = merged.filter((l) => !l.removed_at);
+      const soldCount = merged.length - activeMerged.length;
 
       let filtered = merged.filter((l) => {
+        if (!showSold && l.removed_at) return false;
         if (q.trim()) {
           const hay =
             `${l.make} ${l.model} ${l.trim} ${l.drivetrain} ${l.exterior_color} ${l.vin} ${l.city} ${l.dealer}`.toLowerCase();
@@ -196,9 +203,9 @@ export default function App() {
         filtered = [...filtered].sort(sorters[sort] || sorters.updated_desc);
       }
 
-      const priced = merged.filter((l) => l.price != null);
+      const priced = activeMerged.filter((l) => l.price != null);
       const makeCounts = {};
-      for (const l of merged) {
+      for (const l of activeMerged) {
         makeCounts[l.make] = (makeCounts[l.make] || 0) + 1;
       }
       const makeFacets = Object.entries(makeCounts)
@@ -208,25 +215,26 @@ export default function App() {
       return {
         ...snapshot,
         listings: filtered,
-        allListings: merged,
+        allListings: activeMerged,
         facets: {
           ...snapshot.facets,
           makes: makeFacets,
         },
         kpis: {
           ...snapshot.kpis,
-          totalListings: merged.length,
+          totalListings: activeMerged.length,
           avgPrice: priced.length
             ? Math.round(priced.reduce((sum, l) => sum + Number(l.price), 0) / priced.length)
             : 0,
           minPrice: priced.length ? Math.min(...priced.map((l) => Number(l.price))) : 0,
-          priceDropsCount: merged.filter((l) => getPriceDropAmount(l) > 0).length,
-          newTodayCount: merged.filter((l) => isNewToday(l)).length,
-          starredCount: merged.filter((l) => l.is_starred).length,
+          priceDropsCount: activeMerged.filter((l) => getPriceDropAmount(l) > 0).length,
+          newTodayCount: activeMerged.filter((l) => isNewToday(l)).length,
+          starredCount: activeMerged.filter((l) => l.is_starred).length,
+          soldCount,
         },
       };
     },
-    [q, make, condition, sourceFilter, drivetrain, minYear, maxPrice, sort, onlyDrops, onlyNew, onlyStarred, buildStaticMerged]
+    [q, make, condition, sourceFilter, drivetrain, minYear, maxPrice, sort, onlyDrops, onlyNew, onlyStarred, showSold, buildStaticMerged]
   );
 
   const fetchDashboard = useCallback(async () => {
@@ -256,9 +264,10 @@ export default function App() {
     if (onlyDrops) params.set('onlyDrops', 'true');
     if (onlyNew) params.set('onlyNew', 'true');
     if (onlyStarred) params.set('onlyStarred', 'true');
+    if (showSold) params.set('showSold', 'true');
 
     const hasFilters = Boolean(
-      q.trim() || make || condition || sourceFilter || drivetrain || minYear || maxPrice || onlyDrops || onlyNew || onlyStarred
+      q.trim() || make || condition || sourceFilter || drivetrain || minYear || maxPrice || onlyDrops || onlyNew || onlyStarred || showSold
     );
 
     try {
@@ -298,6 +307,7 @@ export default function App() {
     onlyDrops,
     onlyNew,
     onlyStarred,
+    showSold,
     rawStaticData,
     applyStaticFilters,
   ]);
@@ -328,10 +338,10 @@ export default function App() {
   }, [fetchDashboard, showToast, isStaticMode]);
 
   const allUnfilteredListings = useMemo(() => {
-    if (isStaticMode) {
-      return dashboard?.allListings || buildStaticMerged(rawStaticData);
-    }
-    return unfilteredServerListings || dashboard?.listings || [];
+    const rawList = isStaticMode
+      ? dashboard?.allListings || buildStaticMerged(rawStaticData)
+      : unfilteredServerListings || dashboard?.listings || [];
+    return rawList.filter((l) => !l.removed_at);
   }, [isStaticMode, dashboard, buildStaticMerged, rawStaticData, unfilteredServerListings]);
 
   const ioniq5Ranking = useMemo(
@@ -380,6 +390,38 @@ export default function App() {
     if (res.ok) {
       fetchDashboard();
     }
+  }
+
+  async function handleToggleSold(listing, e) {
+    if (e) e.stopPropagation();
+    const markingSold = !listing.removed_at;
+    const nextRemovedAt = markingSold ? new Date().toISOString() : null;
+
+    if (isStaticMode) {
+      const next = {
+        ...staticPrefs,
+        [listing.vin]: { ...(staticPrefs[listing.vin] || {}), removed_at: nextRemovedAt },
+      };
+      setStaticPrefs(next);
+      writeLocalPrefs(next);
+    } else {
+      const res = await fetch(`/api/listings/${listing.vin}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ removed_at: nextRemovedAt }),
+      });
+      if (!res.ok) return;
+      await fetchDashboard();
+    }
+
+    if (markingSold && !showSold && selectedVin === listing.vin) {
+      setSelectedVin(null);
+    }
+    showToast(
+      markingSold
+        ? `Marked ${listing.year} ${listing.make} ${listing.model} as Sold/Hidden (0 API calls). Toggle "Show Sold" to view or restore.`
+        : `Restored ${listing.year} ${listing.make} ${listing.model} to active inventory.`
+    );
   }
 
   async function handleSaveNotes(vin, notes) {
@@ -492,6 +534,7 @@ export default function App() {
     setOnlyDrops(false);
     setOnlyNew(false);
     setOnlyStarred(false);
+    setShowSold(false);
   }
 
   const displayedListings = useMemo(() => {
@@ -521,7 +564,7 @@ export default function App() {
     Math.min(100, ((quota.cap - quota.reserveBuffer) / quota.cap) * 100)
   );
   const hasActiveFilters = Boolean(
-    q || make || condition || sourceFilter || drivetrain || minYear || maxPrice || onlyDrops || onlyNew || onlyStarred
+    q || make || condition || sourceFilter || drivetrain || minYear || maxPrice || onlyDrops || onlyNew || onlyStarred || showSold
   );
 
   return (
@@ -936,6 +979,14 @@ export default function App() {
                   >
                     <Star size={13} /> Starred ({kpis.starredCount})
                   </button>
+                  <button
+                    type="button"
+                    className={`filter-chip ${showSold ? 'active-ev' : ''}`}
+                    onClick={() => setShowSold((v) => !v)}
+                    title="Include cars marked Sold/Removed from clean backfills or manually hidden (preserves starred notes & price history)"
+                  >
+                    <EyeOff size={13} /> Show Sold ({kpis.soldCount || 0})
+                  </button>
                 </div>
 
                 {hasActiveFilters && (
@@ -960,11 +1011,12 @@ export default function App() {
                 {displayedListings.map((item) => {
                   const drop = getPriceDropAmount(item);
                   const fresh = isNewToday(item);
+                  const isSold = Boolean(item.removed_at);
                   const rankInfo = ioniq5Ranking.byVin.get(item.vin);
                   return (
                     <article
                       key={item.vin}
-                      className="listing-card"
+                      className={`listing-card ${isSold ? 'is-sold' : ''}`}
                       onClick={() => setSelectedVin(item.vin)}
                     >
                       <div className="card-media">
@@ -986,6 +1038,7 @@ export default function App() {
                           }}
                         />
                         <div className="card-badges">
+                          {isSold && <span className="badge badge-sold">SOLD</span>}
                           {rankInfo?.eligible && (
                             <span
                               className={`badge ${
@@ -1001,22 +1054,33 @@ export default function App() {
                             </span>
                           )}
                           <span className="badge badge-cond">{item.condition}</span>
-                          {fresh && <span className="badge badge-new">NEW 24H</span>}
+                          {fresh && !isSold && <span className="badge badge-new">NEW 24H</span>}
                           {drop > 0 && (
                             <span className="badge badge-drop">-{formatCurrency(drop)}</span>
                           )}
                         </div>
-                        <button
-                          type="button"
-                          className={`star-btn ${item.is_starred ? 'starred' : ''}`}
-                          onClick={(e) => handleToggleStar(item, e)}
-                          aria-label={item.is_starred ? 'Unstar EV' : 'Star EV'}
-                        >
-                          <Star
-                            size={15}
-                            fill={item.is_starred ? '#d97706' : 'none'}
-                          />
-                        </button>
+                        <div className="card-top-actions">
+                          <button
+                            type="button"
+                            className={`star-btn sold-toggle-btn ${isSold ? 'is-sold' : ''}`}
+                            onClick={(e) => handleToggleSold(item, e)}
+                            title={isSold ? 'Restore to active inventory (0 API calls)' : 'Mark Sold / Hide (0 API calls)'}
+                            aria-label={isSold ? 'Restore EV' : 'Mark EV sold or hide'}
+                          >
+                            {isSold ? <RotateCcw size={14} /> : <EyeOff size={14} />}
+                          </button>
+                          <button
+                            type="button"
+                            className={`star-btn ${item.is_starred ? 'starred' : ''}`}
+                            onClick={(e) => handleToggleStar(item, e)}
+                            aria-label={item.is_starred ? 'Unstar EV' : 'Star EV'}
+                          >
+                            <Star
+                              size={15}
+                              fill={item.is_starred ? '#d97706' : 'none'}
+                            />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="card-body">
@@ -1087,14 +1151,20 @@ export default function App() {
                       <th>Location</th>
                       <th>VIN</th>
                       <th>Updated</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     {displayedListings.map((item) => {
                       const drop = getPriceDropAmount(item);
+                      const isSold = Boolean(item.removed_at);
                       const rankInfo = ioniq5Ranking.byVin.get(item.vin);
                       return (
-                        <tr key={item.vin} onClick={() => setSelectedVin(item.vin)}>
+                        <tr
+                          key={item.vin}
+                          className={isSold ? 'is-sold' : ''}
+                          onClick={() => setSelectedVin(item.vin)}
+                        >
                           <td onClick={(e) => handleToggleStar(item, e)}>
                             <Star
                               size={15}
@@ -1103,8 +1173,9 @@ export default function App() {
                             />
                           </td>
                           <td>
-                            <div style={{ fontWeight: 700 }}>
-                              {item.year} {item.make} {item.model}
+                            <div style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <span>{item.year} {item.make} {item.model}</span>
+                              {isSold && <span className="badge badge-sold">SOLD</span>}
                             </div>
                             <div style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>
                               {item.trim} · {item.dealer}
@@ -1138,7 +1209,7 @@ export default function App() {
                           <td>
                             {drop > 0 ? (
                               <span className="badge badge-drop">-{formatCurrency(drop)}</span>
-                            ) : isNewToday(item) ? (
+                            ) : isNewToday(item) && !isSold ? (
                               <span className="badge badge-new">NEW</span>
                             ) : (
                               '—'
@@ -1153,6 +1224,16 @@ export default function App() {
                           </td>
                           <td style={{ color: 'var(--ink-muted)', fontSize: '12px' }}>
                             {formatRelativeTime(item.updated_at)}
+                          </td>
+                          <td onClick={(e) => handleToggleSold(item, e)}>
+                            <button
+                              type="button"
+                              className="btn btn-ghost btn-sm"
+                              title={isSold ? 'Restore to active inventory' : 'Mark Sold / Hide'}
+                              aria-label={isSold ? 'Restore EV' : 'Mark EV sold or hide'}
+                            >
+                              {isSold ? <RotateCcw size={14} /> : <EyeOff size={14} />}
+                            </button>
                           </td>
                         </tr>
                       );
@@ -1179,7 +1260,9 @@ export default function App() {
             showToast(res.message);
           } else {
             showToast(
-              `Live sync finished: ${res.listingsFetched} EVs fetched (${res.callsUsed} API calls).`
+              `Live sync finished: ${res.listingsFetched} EVs fetched (${res.callsUsed} API calls${
+                res.markedSold > 0 ? `, ${res.markedSold} marked sold` : ''
+              }).`
             );
           }
         }}
@@ -1200,6 +1283,7 @@ export default function App() {
         liveApiConfigured={cacheStatus.liveApiConfigured}
         onClose={() => setSelectedVin(null)}
         onToggleStar={(listing) => handleToggleStar(listing)}
+        onToggleSold={(listing) => handleToggleSold(listing)}
         onSaveNotes={handleSaveNotes}
         onRefreshVin={handleRefreshVin}
       />

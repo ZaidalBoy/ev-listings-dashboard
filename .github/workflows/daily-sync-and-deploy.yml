@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       sync_profile:
-        description: 'Sync profile (auto = 10p Day-1 backfill, then 3p daily updatedAt delta)'
+        description: 'Sync profile (auto = 3p daily Mon-Sat + 10p Sunday backfill to clear sold cars)'
         required: false
         default: 'auto'
         type: choice
@@ -52,6 +52,10 @@ jobs:
           AUTODEV_API_KEY: ${{ secrets.AUTODEV_API_KEY }}
         run: |
           PROFILE="${{ github.event.inputs.sync_profile || 'auto' }}"
+          # On scheduled Sunday runs (13:00 UTC = 5 AM PST / 6 AM PDT), run a clean backfill to mark sold Auto.dev cars
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(date -u +%u)" = "7" ]; then
+            PROFILE="backfill"
+          fi
           if [ "${{ github.event.inputs.force_sync }}" = "true" ]; then
             node server/cli-sync.js --force --profile="$PROFILE"
           else

@@ -67,20 +67,25 @@ const allStats = db
       SUM(CASE WHEN previous_price IS NOT NULL AND price < previous_price THEN 1 ELSE 0 END) as priceDropsCount,
       SUM(CASE WHEN is_starred = 1 THEN 1 ELSE 0 END) as starredCount,
       MAX(last_seen_at) as lastCacheUpdate
-     FROM listings`
+     FROM listings
+     WHERE removed_at IS NULL`
   )
   .get();
 
+const soldCount = db
+  .prepare('SELECT COUNT(*) as c FROM listings WHERE removed_at IS NOT NULL')
+  .get().c;
+
 const oneDayAgo = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
 const newTodayCount = db
-  .prepare('SELECT COUNT(*) as c FROM listings WHERE first_seen_at >= ?')
+  .prepare('SELECT COUNT(*) as c FROM listings WHERE removed_at IS NULL AND first_seen_at >= ?')
   .get(oneDayAgo).c;
 
 const makeFacets = db
-  .prepare('SELECT make, COUNT(*) as count FROM listings GROUP BY make ORDER BY count DESC, make ASC')
+  .prepare('SELECT make, COUNT(*) as count FROM listings WHERE removed_at IS NULL GROUP BY make ORDER BY count DESC, make ASC')
   .all();
 const stateFacets = db
-  .prepare("SELECT state, COUNT(*) as count FROM listings WHERE state IS NOT NULL AND state != '' GROUP BY state ORDER BY count DESC, state ASC")
+  .prepare("SELECT state, COUNT(*) as count FROM listings WHERE removed_at IS NULL AND state IS NOT NULL AND state != '' GROUP BY state ORDER BY count DESC, state ASC")
   .all();
 
 const snapshots = db.prepare('SELECT * FROM sync_snapshots ORDER BY id DESC LIMIT 12').all();
@@ -104,6 +109,7 @@ const payload = {
     priceDropsCount: allStats.priceDropsCount || 0,
     newTodayCount: newTodayCount || 0,
     starredCount: allStats.starredCount || 0,
+    soldCount: soldCount || 0,
     lastCacheUpdate: allStats.lastCacheUpdate || null,
   },
   facets: {

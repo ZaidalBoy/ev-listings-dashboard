@@ -48,12 +48,16 @@ export function createApp({ dbPath } = {}) {
       onlyStarred = '',
       onlyDrops = '',
       onlyNew = '',
+      showSold = '',
       sort = 'updated_desc',
     } = req.query;
 
     const where = ['1=1'];
     const params = [];
 
+    if (!(showSold === 'true' || showSold === '1')) {
+      where.push('removed_at IS NULL');
+    }
     if (q) {
       where.push(
         '(make LIKE ? OR model LIKE ? OR trim LIKE ? OR drivetrain LIKE ? OR exterior_color LIKE ? OR vin LIKE ? OR city LIKE ? OR dealer LIKE ?)'
@@ -130,7 +134,7 @@ export function createApp({ dbPath } = {}) {
         })(),
       }));
 
-    // Summary stats across ALL cached EVs (not just filtered view)
+    // Summary stats across ALL active cached EVs (not just filtered view)
     const allStats = db
       .prepare(
         `SELECT
@@ -140,20 +144,25 @@ export function createApp({ dbPath } = {}) {
           SUM(CASE WHEN previous_price IS NOT NULL AND price < previous_price THEN 1 ELSE 0 END) as priceDropsCount,
           SUM(CASE WHEN is_starred = 1 THEN 1 ELSE 0 END) as starredCount,
           MAX(last_seen_at) as lastCacheUpdate
-         FROM listings`
+         FROM listings
+         WHERE removed_at IS NULL`
       )
       .get();
 
+    const soldCount = db
+      .prepare('SELECT COUNT(*) as c FROM listings WHERE removed_at IS NOT NULL')
+      .get().c;
+
     const oneDayAgo = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
     const newTodayCount = db
-      .prepare('SELECT COUNT(*) as c FROM listings WHERE first_seen_at >= ?')
+      .prepare('SELECT COUNT(*) as c FROM listings WHERE removed_at IS NULL AND first_seen_at >= ?')
       .get(oneDayAgo).c;
 
     const makeFacets = db
-      .prepare('SELECT make, COUNT(*) as count FROM listings GROUP BY make ORDER BY count DESC, make ASC')
+      .prepare('SELECT make, COUNT(*) as count FROM listings WHERE removed_at IS NULL GROUP BY make ORDER BY count DESC, make ASC')
       .all();
     const stateFacets = db
-      .prepare("SELECT state, COUNT(*) as count FROM listings WHERE state IS NOT NULL AND state != '' GROUP BY state ORDER BY count DESC, state ASC")
+      .prepare("SELECT state, COUNT(*) as count FROM listings WHERE removed_at IS NULL AND state IS NOT NULL AND state != '' GROUP BY state ORDER BY count DESC, state ASC")
       .all();
 
     const snapshots = db
@@ -176,6 +185,7 @@ export function createApp({ dbPath } = {}) {
         priceDropsCount: allStats.priceDropsCount || 0,
         newTodayCount: newTodayCount || 0,
         starredCount: allStats.starredCount || 0,
+        soldCount: soldCount || 0,
         lastCacheUpdate: allStats.lastCacheUpdate || null,
       },
       facets: {
@@ -262,9 +272,9 @@ export function createApp({ dbPath } = {}) {
     }
   });
 
-  // Star & local notes (0 API calls)
+  // Star, local notes & manual sold/removed toggle (0 API calls)
   app.patch('/api/listings/:vin', (req, res) => {
-    const { is_starred, notes } = req.body || {};
+    const { is_starred, notes, removed_at } = req.body || {};
     const existing = db.prepare('SELECT vin FROM listings WHERE vin = ?').get(req.params.vin);
     if (!existing) {
       return res.status(404).json({ error: 'Listing not found' });
@@ -278,6 +288,18 @@ export function createApp({ dbPath } = {}) {
     if (notes !== undefined) {
       db.prepare('UPDATE listings SET notes = ? WHERE vin = ?').run(
         String(notes),
+        req.params.vin
+      );
+    }
+    if (removed_at !== undefined) {
+      const nextRemovedAt =
+        removed_at === null || removed_at === '' || removed_at === false
+          ? null
+          : typeof removed_at === 'string'
+            ? removed_at
+            : new Date().toISOString();
+      db.prepare('UPDATE listings SET removed_at = ? WHERE vin = ?').run(
+        nextRemovedAt,
         req.params.vin
       );
     }

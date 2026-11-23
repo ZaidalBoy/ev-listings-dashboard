@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T20:12:12.134Z",
+  "generatedAt": "2026-11-23T10:39:13.603Z",
   "staticSnapshot": true,
   "listings": [
     {
@@ -6410,6 +6410,7 @@
     "priceDropsCount": 35,
     "newTodayCount": 1,
     "starredCount": 0,
+    "soldCount": 0,
     "lastCacheUpdate": "2026-11-22T20:12:11.897Z"
   },
   "facets": {
@@ -6446,12 +6447,12 @@
     "reserveBuffer": 50,
     "autoSyncBudgetRemaining": 871,
     "pctUsed": 7.9,
-    "dayOfMonth": 22,
+    "dayOfMonth": 23,
     "daysInMonth": 30,
-    "daysRemaining": 9,
-    "dailyBurnRate": 3.59,
-    "projectedMonthEnd": 108,
-    "safeDailyBudget": 102.3,
+    "daysRemaining": 8,
+    "dailyBurnRate": 3.43,
+    "projectedMonthEnd": 103,
+    "safeDailyBudget": 115.1,
     "dailyHistory": [
       {
         "day": "2026-11-14",

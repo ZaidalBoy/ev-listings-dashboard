@@ -269,10 +269,22 @@ export function buildSyncPlan(db, options = {}) {
     blockedReason = `Automated sync paused to protect your ${settings.reserveBuffer}-call emergency reserve (${quota.used}/${quota.cap} used).`;
   }
 
+  const isFullBackfill =
+    syncProfile === 'backfill' &&
+    !options.quickSingleCall &&
+    !(options.presetIds?.length) &&
+    !options.zip &&
+    !(options.state ?? settings.stateFilter) &&
+    !options.maxPrice &&
+    queries.length === rawCallCount &&
+    rawCallCount > 0;
+
   return {
     liveApiConfigured: hasLiveApiKey(),
     mode: hasLiveApiKey() && !options.forceDemo ? 'live' : 'demo',
     syncProfile,
+    isFullBackfill,
+    plannedPresetIds: selectedPresets.map((p) => p.id),
     pagesPerQuery: effectivePages,
     updatedSince,
     triggerType: options.triggerType || 'manual',
@@ -456,6 +468,7 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
     const errors = [];
     const exhaustedPresets = new Set();
     const executedQueries = [];
+    const seenAutoDevVins = new Set();
 
     for (const q of plan.queries) {
       if (exhaustedPresets.has(q.presetId)) {
@@ -481,6 +494,7 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
         for (const item of items) {
           const normalized = normalizeListingRow(item);
           if (!normalized) continue;
+          seenAutoDevVins.add(normalized.vin);
           const { isNew, isPriceDrop } = upsertListingRecord(db, normalized, 'autodev');
           if (isNew) newListings++;
           if (isPriceDrop) priceDrops++;
@@ -501,6 +515,27 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
     }
 
     const completedAt = new Date().toISOString();
+    let markedSold = 0;
+    const allPresetsExhausted =
+      Array.isArray(plan.plannedPresetIds) &&
+      plan.plannedPresetIds.length > 0 &&
+      plan.plannedPresetIds.every((id) => exhaustedPresets.has(id));
+    const isCleanFullBackfill =
+      Boolean(plan.isFullBackfill) && errors.length === 0 && allPresetsExhausted;
+
+    if (isCleanFullBackfill) {
+      const existingAutoDev = db
+        .prepare("SELECT vin FROM listings WHERE source = 'autodev' AND removed_at IS NULL")
+        .all();
+      const markStmt = db.prepare('UPDATE listings SET removed_at = ? WHERE vin = ?');
+      for (const row of existingAutoDev) {
+        if (!seenAutoDevVins.has(row.vin)) {
+          markStmt.run(completedAt, row.vin);
+          markedSold++;
+        }
+      }
+    }
+
     if (callsUsed > 0 && errors.length < callsUsed) {
       updateSettings(db, {
         lastAutoSyncAt: completedAt,
@@ -510,9 +545,12 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
 
     const status =
       errors.length === 0 ? 'completed' : errors.length < callsUsed ? 'partial' : 'failed';
+    const soldSuffix = isCleanFullBackfill
+      ? ` · ${markedSold} marked sold/removed`
+      : '';
     const summary = `[${plan.syncProfile}${
       plan.updatedSince ? ` since ${plan.updatedSince}` : ''
-    }] ${executedQueries.join(', ')}`;
+    }] ${executedQueries.join(', ')}${soldSuffix}`;
     const snapRes = db
       .prepare(
         `INSERT INTO sync_snapshots (started_at, completed_at, trigger_type, mode, calls_used, listings_fetched, new_listings, price_drops, status, error_message, query_summary)
@@ -535,6 +573,8 @@ export async function executeSync(db, options = {}, fetchImpl = fetch) {
       status,
       mode: 'live',
       syncProfile: plan.syncProfile,
+      cleanFullBackfill: isCleanFullBackfill,
+      markedSold,
       snapshotId: Number(snapRes.lastInsertRowid),
       callsUsed,
       callsSavedByEarlyStop: Math.max(0, plan.queries.length - callsUsed),

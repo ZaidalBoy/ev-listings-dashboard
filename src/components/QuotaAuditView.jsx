@@ -100,7 +100,7 @@ export default function QuotaAuditView({ quota, settings, snapshots, recentCalls
             <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
               <ShieldCheck size={16} style={{ color: 'var(--accent-ev)', flexShrink: 0, marginTop: '2px' }} />
               <div>
-                <strong>Consolidated OR Queries & Max-20 Cap:</strong> Combines EV makes/models via comma syntax (<span className="mono">limit=20</span> per Free tier) so 3 calls fetch up to 60 EVs/day (~90 calls/mo).
+                <strong>Daily Deltas + Weekly Sunday Backfill:</strong> Mon–Sat incremental runs check <span className="mono">updatedAt</span> (~4 calls/day); Sunday runs execute a clean full backfill (~7 calls) that stamps sold Auto.dev listings as <span className="mono">removed_at</span> while preserving notes and price history.
               </div>
             </div>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>

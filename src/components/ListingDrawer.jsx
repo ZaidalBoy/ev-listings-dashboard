@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, Star, ExternalLink, RefreshCw, MapPin, Gauge, Palette, Building2, Check, Award } from 'lucide-react';
+import { X, Star, ExternalLink, RefreshCw, MapPin, Gauge, Palette, Building2, Check, Award, EyeOff, RotateCcw } from 'lucide-react';
 import { formatCurrency, formatMiles, formatRelativeTime, getPriceDropAmount } from '../utils/formatters.js';
 import { IONIQ5_DIMENSIONS } from '../utils/evRanker.js';
 
@@ -9,6 +9,7 @@ export default function ListingDrawer({
   liveApiConfigured,
   onClose,
   onToggleStar,
+  onToggleSold,
   onSaveNotes,
   onRefreshVin,
 }) {
@@ -25,6 +26,7 @@ export default function ListingDrawer({
   if (!listing) return null;
 
   const drop = getPriceDropAmount(listing);
+  const isSold = Boolean(listing.removed_at);
 
   async function handleSaveNotes() {
     setSavingNotes(true);
@@ -51,8 +53,9 @@ export default function ListingDrawer({
       <div className="drawer-panel" onClick={(e) => e.stopPropagation()}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
               <span className="badge badge-cond">{listing.condition}</span>
+              {isSold && <span className="badge badge-sold">SOLD / REMOVED</span>}
               <span className="mono" style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>
                 VIN: {listing.vin}
               </span>
@@ -81,6 +84,35 @@ export default function ListingDrawer({
             </button>
           </div>
         </div>
+
+        {isSold && (
+          <div
+            style={{
+              padding: '10px 12px',
+              borderRadius: 'var(--radius-sm)',
+              background: '#fef2f2',
+              border: '1px solid #fecaca',
+              color: '#991b1b',
+              fontSize: '12px',
+              fontWeight: 600,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <span>Marked Sold / Removed {formatRelativeTime(listing.removed_at)}</span>
+            {onToggleSold && (
+              <button
+                type="button"
+                className="btn btn-sm"
+                onClick={() => onToggleSold(listing)}
+              >
+                <RotateCcw size={13} /> Restore
+              </button>
+            )}
+          </div>
+        )}
 
         <div className="card-media" style={{ borderRadius: 'var(--radius-md)' }}>
           <img
@@ -292,6 +324,22 @@ export default function ListingDrawer({
             gap: '8px',
           }}
         >
+          {onToggleSold && (
+            <button
+              type="button"
+              className="btn"
+              onClick={() => onToggleSold(listing)}
+              title={
+                isSold
+                  ? 'Restore this listing to active inventory (0 API calls)'
+                  : 'Hide this listing and preserve notes/price history (0 API calls)'
+              }
+            >
+              {isSold ? <RotateCcw size={14} /> : <EyeOff size={14} />}
+              {isSold ? 'Restore to Active Inventory (0 API Calls)' : 'Mark Sold / Hide (0 API Calls)'}
+            </button>
+          )}
+
           <button
             type="button"
             className="btn"
