@@ -18,6 +18,7 @@ import {
   refreshSingleVin,
 } from './autodevClient.js';
 import { importLucidHtmlToDb } from './import-lucid.js';
+import { estimateListingMsrp } from '../src/utils/msrpEstimator.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT) || 3001;
@@ -119,7 +120,7 @@ export function createApp({ dbPath } = {}) {
     };
     const orderBy = sortMap[sort] || sortMap.updated_desc;
 
-    const listings = db
+    let listings = db
       .prepare(`SELECT * FROM listings WHERE ${where.join(' AND ')} ORDER BY ${orderBy}`)
       .all(...params)
       .map((row) => ({
@@ -133,6 +134,16 @@ export function createApp({ dbPath } = {}) {
           }
         })(),
       }));
+
+    if (sort === 'msrp_pct_desc' || sort === 'msrp_saved_desc') {
+      listings = [...listings].sort((a, b) => {
+        const ma = estimateListingMsrp(a);
+        const mb = estimateListingMsrp(b);
+        const va = sort === 'msrp_pct_desc' ? (ma.savingsPct ?? -999) : (ma.savingsAmount ?? -9e9);
+        const vb = sort === 'msrp_pct_desc' ? (mb.savingsPct ?? -999) : (mb.savingsAmount ?? -9e9);
+        return vb - va;
+      });
+    }
 
     // Summary stats across ALL active cached EVs (not just filtered view)
     const allStats = db

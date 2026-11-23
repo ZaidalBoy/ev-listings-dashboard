@@ -422,6 +422,14 @@ export default function TopPicksView({
                           </div>
                           <div className="card-price-block">
                             <div className="card-price">{formatCurrency(item.price)}</div>
+                            {item.msrpInfo?.savingsAmount > 0 && (
+                              <div
+                                className="card-msrp-save mono"
+                                title={`Est. MSRP ${formatCurrency(item.msrpInfo.effectiveMsrp)}`}
+                              >
+                                {Math.round(item.msrpInfo.savingsPct)}% off · -{formatCurrency(item.msrpInfo.savingsAmount)}
+                              </div>
+                            )}
                             {drop > 0 && (
                               <div className="card-prev-price">
                                 {formatCurrency(item.previous_price)}
@@ -442,7 +450,7 @@ export default function TopPicksView({
                           </span>
                         </div>
 
-                        {/* Compact 6-dimension visual breakdown */}
+                        {/* Compact dimension visual breakdown */}
                         <div className="score-mini-breakdown">
                           {IONIQ5_DIMENSIONS.map((dim) => {
                             const b = item.breakdown[dim.key];
@@ -519,6 +527,7 @@ export default function TopPicksView({
                     <th>Trim / Drive</th>
                     <th>EPA Range</th>
                     <th>Price</th>
+                    <th>vs. MSRP</th>
                     <th>Mileage</th>
                     <th>Condition</th>
                     <th>Location</th>
@@ -566,6 +575,15 @@ export default function TopPicksView({
                       </td>
                       <td className="mono" style={{ fontWeight: 700 }}>
                         {formatCurrency(item.price)}
+                      </td>
+                      <td className="mono" style={{ fontSize: '12px' }}>
+                        {item.msrpInfo?.savingsAmount > 0 ? (
+                          <span style={{ color: 'var(--status-good)', fontWeight: 700 }}>
+                            {Math.round(item.msrpInfo.savingsPct)}% (-{formatCurrency(item.msrpInfo.savingsAmount)})
+                          </span>
+                        ) : (
+                          '—'
+                        )}
                       </td>
                       <td className="mono">{formatMiles(item.miles)}</td>
                       <td>

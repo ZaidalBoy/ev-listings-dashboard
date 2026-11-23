@@ -2,6 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { lookupBaseMsrp } from '../src/utils/msrpEstimator.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_DB_PATH = path.resolve(__dirname, '../data/ev_dashboard.db');
@@ -107,6 +108,7 @@ export function createDatabase(dbPath = DEFAULT_DB_PATH) {
       interior_color TEXT,
       price INTEGER,
       previous_price INTEGER,
+      base_msrp INTEGER,
       miles INTEGER,
       condition TEXT DEFAULT 'used',
       dealer TEXT,
@@ -167,6 +169,32 @@ export function createDatabase(dbPath = DEFAULT_DB_PATH) {
       value TEXT NOT NULL
     );
   `);
+
+  const listingCols = db.prepare('PRAGMA table_info(listings)').all().map((c) => c.name);
+  if (!listingCols.includes('base_msrp')) {
+    db.exec('ALTER TABLE listings ADD COLUMN base_msrp INTEGER');
+  }
+  const missingMsrpRows = db
+    .prepare('SELECT vin, year, make, model, trim, drivetrain, raw_json FROM listings WHERE base_msrp IS NULL')
+    .all();
+  if (missingMsrpRows.length > 0) {
+    const updMsrp = db.prepare('UPDATE listings SET base_msrp = ? WHERE vin = ?');
+    for (const r of missingMsrpRows) {
+      let bm = null;
+      if (r.raw_json) {
+        try {
+          const parsed = JSON.parse(r.raw_json);
+          if (parsed?.vehicle?.baseMsrp != null && Number(parsed.vehicle.baseMsrp) > 0) {
+            bm = Number(parsed.vehicle.baseMsrp);
+          }
+        } catch {}
+      }
+      if (!bm) {
+        bm = lookupBaseMsrp(r);
+      }
+      if (bm) updMsrp.run(bm, r.vin);
+    }
+  }
 
   const defaults = {
     syncMode: 'daily_auto',

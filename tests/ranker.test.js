@@ -87,3 +87,96 @@ test('ranks real dashboard.json Ioniq 5 snapshot cleanly and produces 5 top pick
     assert.ok(['SEL', 'Limited'].includes(res.top5[i].normTrim));
   }
 });
+
+test('estimateListingMsrp uses Auto.dev base_msrp, Lucid ADAS options, destination toggle, and custom options', async () => {
+  const { estimateListingMsrp } = await import('../src/utils/msrpEstimator.js');
+
+  const ioniq = estimateListingMsrp({
+    year: 2025,
+    make: 'Hyundai',
+    model: 'Ioniq 5',
+    trim: 'SEL',
+    drivetrain: 'RWD',
+    price: 27590,
+    base_msrp: 49600,
+  });
+  assert.equal(ioniq.msrpSource, 'autodev_base');
+  assert.equal(ioniq.baseMsrp, 49600);
+  assert.equal(ioniq.destinationMsrp, 1475);
+  assert.equal(ioniq.effectiveMsrp, 51075);
+  assert.equal(ioniq.savingsAmount, 23485);
+  assert.ok(ioniq.savingsPct > 45);
+
+  const lucid = estimateListingMsrp(
+    {
+      year: 2025,
+      make: 'Lucid',
+      model: 'Air',
+      trim: 'Pure · DreamDrive Pro · 372 mi EPA',
+      drivetrain: 'RWD',
+      price: 44098,
+    },
+    { includeDestination: true, customOptionsMsrp: 2900 }
+  );
+  assert.equal(lucid.msrpSource, 'trim_lookup');
+  assert.equal(lucid.baseMsrp, 69900);
+  assert.equal(lucid.knownAdasLabel, 'DreamDrive Pro');
+  assert.equal(lucid.knownAdasMsrp, 6750);
+  assert.equal(lucid.destinationMsrp, 1500);
+  assert.equal(lucid.effectiveMsrp, 69900 + 6750 + 1500 + 2900);
+  assert.equal(lucid.savingsAmount, 81050 - 44098);
+
+  const strict = estimateListingMsrp(
+    {
+      year: 2025,
+      make: 'Hyundai',
+      model: 'Ioniq 5',
+      trim: 'SEL',
+      drivetrain: 'RWD',
+      price: 27590,
+      base_msrp: 49600,
+    },
+    { includeDestination: false }
+  );
+  assert.equal(strict.effectiveMsrp, 49600);
+  assert.equal(strict.savingsAmount, 22010);
+});
+
+test('rankIoniq5Listings includes % Off MSRP weighted slider and upgrades legacy saved configs', () => {
+  const sample = [
+    {
+      vin: 'VIN_2025_HIGH_MSRP',
+      year: 2025,
+      make: 'Hyundai',
+      model: 'Ioniq 5',
+      trim: 'SEL',
+      drivetrain: 'RWD',
+      price: 30000,
+      base_msrp: 49600,
+      miles: 10000,
+      condition: 'used',
+    },
+    {
+      vin: 'VIN_2026_LOW_MSRP',
+      year: 2026,
+      make: 'Hyundai',
+      model: 'Ioniq 5',
+      trim: 'SEL',
+      drivetrain: 'RWD',
+      price: 30000,
+      base_msrp: 39800,
+      miles: 10000,
+      condition: 'used',
+    },
+  ];
+
+  // Heavy % Off MSRP weighting lifts the 2025 (41% off) above 2026 (28% off) at equal price/miles
+  const res = rankIoniq5Listings(sample, {
+    maxPrice: 45000,
+    allowedTrims: ['SEL', 'Limited'],
+    weights: { price: 0, mileage: 0, range: 0, trim: 0, year: 10, msrpSavings: 60, condition: 0 },
+  });
+  assert.equal(res.top5[0].vin, 'VIN_2025_HIGH_MSRP');
+  assert.ok(res.top5[0].breakdown.msrpSavings);
+});
+

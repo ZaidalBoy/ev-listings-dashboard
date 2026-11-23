@@ -40,6 +40,7 @@ import {
   rankIoniq5Listings,
   sanitizeIoniq5Config,
 } from './utils/evRanker.js';
+import { estimateListingMsrp } from './utils/msrpEstimator.js';
 
 const IS_STATIC_BUILD = import.meta.env.VITE_STATIC_MODE === 'true';
 const STATIC_BUILD_ID = import.meta.env.VITE_BUILD_ID || '';
@@ -198,6 +199,10 @@ export default function App() {
         miles_asc: (a, b) => (a.miles ?? 9e9) - (b.miles ?? 9e9),
         year_desc: (a, b) => b.year - a.year || (a.price ?? 9e9) - (b.price ?? 9e9),
         drop_desc: (a, b) => getPriceDropAmount(b) - getPriceDropAmount(a),
+        msrp_pct_desc: (a, b) =>
+          (estimateListingMsrp(b).savingsPct ?? -999) - (estimateListingMsrp(a).savingsPct ?? -999),
+        msrp_saved_desc: (a, b) =>
+          (estimateListingMsrp(b).savingsAmount ?? -9e9) - (estimateListingMsrp(a).savingsAmount ?? -9e9),
       };
       if (sort !== 'score_desc') {
         filtered = [...filtered].sort(sorters[sort] || sorters.updated_desc);
@@ -948,6 +953,8 @@ export default function App() {
                 >
                   <option value="updated_desc">Sort: Recently Updated</option>
                   <option value="score_desc">Sort: Best Match Score (Ioniq 5)</option>
+                  <option value="msrp_pct_desc">Sort: Biggest % Off MSRP</option>
+                  <option value="msrp_saved_desc">Sort: Most $ Saved vs MSRP</option>
                   <option value="price_asc">Sort: Price Low → High</option>
                   <option value="price_desc">Sort: Price High → Low</option>
                   <option value="miles_asc">Sort: Lowest Mileage</option>
@@ -1013,6 +1020,7 @@ export default function App() {
                   const fresh = isNewToday(item);
                   const isSold = Boolean(item.removed_at);
                   const rankInfo = ioniq5Ranking.byVin.get(item.vin);
+                  const msrpInfo = estimateListingMsrp(item);
                   return (
                     <article
                       key={item.vin}
@@ -1096,6 +1104,16 @@ export default function App() {
                           </div>
                           <div className="card-price-block">
                             <div className="card-price">{formatCurrency(item.price)}</div>
+                            {msrpInfo.savingsAmount > 0 && (
+                              <div
+                                className="card-msrp-save mono"
+                                title={`Est. MSRP ${formatCurrency(msrpInfo.effectiveMsrp)}${
+                                  msrpInfo.knownAdasLabel ? ` (incl. dest & ${msrpInfo.knownAdasLabel})` : ' (incl. dest)'
+                                }`}
+                              >
+                                {Math.round(msrpInfo.savingsPct)}% off · -{formatCurrency(msrpInfo.savingsAmount)}
+                              </div>
+                            )}
                             {drop > 0 && (
                               <div className="card-prev-price">
                                 {formatCurrency(item.previous_price)}
@@ -1146,6 +1164,7 @@ export default function App() {
                       <th>Score</th>
                       <th>Condition</th>
                       <th>Price</th>
+                      <th>vs. MSRP</th>
                       <th>Delta</th>
                       <th>Mileage</th>
                       <th>Location</th>
@@ -1159,6 +1178,7 @@ export default function App() {
                       const drop = getPriceDropAmount(item);
                       const isSold = Boolean(item.removed_at);
                       const rankInfo = ioniq5Ranking.byVin.get(item.vin);
+                      const msrpInfo = estimateListingMsrp(item);
                       return (
                         <tr
                           key={item.vin}
@@ -1205,6 +1225,15 @@ export default function App() {
                           </td>
                           <td className="mono" style={{ fontWeight: 700 }}>
                             {formatCurrency(item.price)}
+                          </td>
+                          <td className="mono" style={{ fontSize: '12px' }}>
+                            {msrpInfo.savingsAmount > 0 ? (
+                              <span style={{ color: 'var(--status-good)', fontWeight: 700 }}>
+                                {Math.round(msrpInfo.savingsPct)}% (-{formatCurrency(msrpInfo.savingsAmount)})
+                              </span>
+                            ) : (
+                              '—'
+                            )}
                           </td>
                           <td>
                             {drop > 0 ? (

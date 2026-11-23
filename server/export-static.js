@@ -35,6 +35,7 @@ const listings = db
       interior_color: row.interior_color,
       price: row.price,
       previous_price: row.previous_price,
+      base_msrp: row.base_msrp ?? null,
       miles: row.miles,
       condition: row.condition,
       dealer: row.dealer,

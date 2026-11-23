@@ -1,3 +1,5 @@
+import { estimateListingMsrp } from './msrpEstimator.js';
+
 export const RANKER_STORAGE_KEY = 'voltwatch_ranker_prefs_v1';
 
 export const IONIQ5_DIMENSIONS = [
@@ -37,8 +39,15 @@ export const IONIQ5_DIMENSIONS = [
     color: '#d97706',
   },
   {
-    key: 'condition',
+    key: 'msrpSavings',
     rank: 6,
+    label: '% Off MSRP',
+    description: 'Bigger % discount vs original MSRP scores higher',
+    color: '#10b981',
+  },
+  {
+    key: 'condition',
+    rank: 7,
     label: 'Condition',
     description: 'Certified Pre-Owned (CPO) over Used',
     color: '#475569',
@@ -58,11 +67,12 @@ export const DEFAULT_IONIQ5_CONFIG = {
   maxPrice: 45000,
   allowedTrims: ['SEL', 'Limited'],
   weights: {
-    price: 30,
-    mileage: 24,
+    price: 28,
+    mileage: 22,
     range: 18,
-    trim: 14,
+    trim: 12,
     year: 8,
+    msrpSavings: 6,
     condition: 6,
   },
 };
@@ -74,7 +84,7 @@ export const RANKER_PROFILES = [
     model: 'Ioniq 5',
     label: 'Hyundai Ioniq 5',
     ready: true,
-    subtitle: 'SEL & Limited · <= $45k · Price > Mileage > Range > Trim > Year > Condition',
+    subtitle: 'SEL & Limited · <= $45k · Price > Mileage > Range > Trim > Year > % Off MSRP > Condition',
   },
   {
     id: 'lucid_air',
@@ -245,6 +255,7 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
     const normTrim = normalizeIoniq5Trim(listing.trim);
     const normDrivetrain = normalizeDrivetrain(listing);
     const epa = estimateIoniq5Range(listing);
+    const msrpInfo = estimateListingMsrp(listing);
     const reasons = [];
 
     if (config.allowedTrims.length > 0 && !config.allowedTrims.includes(normTrim)) {
@@ -261,6 +272,7 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
       normTrim,
       normDrivetrain,
       epaRange: epa.miles,
+      msrpInfo,
     };
 
     if (reasons.length > 0) {
@@ -283,7 +295,19 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
       ranked: [],
       top5: [],
       disqualified,
-      byVin: new Map(disqualified.map((d) => [d.vin, { eligible: false, disqualifyReasons: d.disqualifyReasons, epaRange: d.epaRange, normTrim: d.normTrim }])),
+      byVin: new Map(
+        disqualified.map((d) => [
+          d.vin,
+          {
+            eligible: false,
+            disqualifyReasons: d.disqualifyReasons,
+            epaRange: d.epaRange,
+            normTrim: d.normTrim,
+            normDrivetrain: d.normDrivetrain,
+            msrpInfo: d.msrpInfo,
+          },
+        ])
+      ),
       stats: null,
     };
   }
@@ -292,6 +316,9 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
   const milesList = eligible.map((l) => Number(l.miles)).filter((m) => Number.isFinite(m));
   const ranges = eligible.map((l) => Number(l.epaRange));
   const years = eligible.map((l) => Number(l.year));
+  const savingsPcts = eligible
+    .map((l) => l.msrpInfo?.savingsPct)
+    .filter((v) => v != null && Number.isFinite(v));
 
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
@@ -301,12 +328,18 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
   const maxRange = Math.max(...ranges);
   const minYear = Math.min(...years);
   const maxYear = Math.max(...years);
+  const minSavingsPct = savingsPcts.length ? Math.min(...savingsPcts) : 0;
+  const maxSavingsPct = savingsPcts.length ? Math.max(...savingsPcts) : 0;
 
   const scored = eligible.map((l) => {
     const priceVal = Number(l.price);
     const milesVal = l.miles != null && Number.isFinite(Number(l.miles)) ? Number(l.miles) : maxMiles;
     const rangeVal = Number(l.epaRange);
     const yearVal = Number(l.year);
+    const savingsPctVal =
+      l.msrpInfo?.savingsPct != null && Number.isFinite(l.msrpInfo.savingsPct)
+        ? l.msrpInfo.savingsPct
+        : minSavingsPct;
 
     const subScores = {
       price: minMaxLowerBetter(priceVal, minPrice, maxPrice),
@@ -314,6 +347,7 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
       range: minMaxHigherBetter(rangeVal, minRange, maxRange),
       trim: getTrimSubScore(l.normTrim),
       year: minMaxHigherBetter(yearVal, minYear, maxYear),
+      msrpSavings: minMaxHigherBetter(savingsPctVal, minSavingsPct, maxSavingsPct),
       condition: getConditionSubScore(l.condition),
     };
 
@@ -364,6 +398,7 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
       epaRange: item.epaRange,
       normTrim: item.normTrim,
       normDrivetrain: item.normDrivetrain,
+      msrpInfo: item.msrpInfo,
       breakdown: item.breakdown,
     });
   }
@@ -374,6 +409,7 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
       epaRange: item.epaRange,
       normTrim: item.normTrim,
       normDrivetrain: item.normDrivetrain,
+      msrpInfo: item.msrpInfo,
     });
   }
 
@@ -396,6 +432,8 @@ export function rankIoniq5Listings(allListings, rawConfig = DEFAULT_IONIQ5_CONFI
       maxRange,
       minYear,
       maxYear,
+      minSavingsPct,
+      maxSavingsPct,
     },
   };
 }

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { X, Star, ExternalLink, RefreshCw, MapPin, Gauge, Palette, Building2, Check, Award, EyeOff, RotateCcw } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { X, Star, ExternalLink, RefreshCw, MapPin, Gauge, Palette, Building2, Check, Award, EyeOff, RotateCcw, Calculator } from 'lucide-react';
 import { formatCurrency, formatMiles, formatRelativeTime, getPriceDropAmount } from '../utils/formatters.js';
 import { IONIQ5_DIMENSIONS } from '../utils/evRanker.js';
+import { estimateListingMsrp } from '../utils/msrpEstimator.js';
 
 export default function ListingDrawer({
   listing,
@@ -17,11 +18,27 @@ export default function ListingDrawer({
   const [savingNotes, setSavingNotes] = useState(false);
   const [savedFlag, setSavedFlag] = useState(false);
   const [refreshingVin, setRefreshingVin] = useState(false);
+  const [includeDestination, setIncludeDestination] = useState(true);
+  const [customOptionsMsrp, setCustomOptionsMsrp] = useState(0);
 
   useEffect(() => {
     setNotes(listing?.notes || '');
     setSavedFlag(false);
+    setIncludeDestination(true);
+    setCustomOptionsMsrp(0);
   }, [listing]);
+
+  const msrpCalc = useMemo(
+    () =>
+      listing
+        ? estimateListingMsrp(listing, {
+            includeDestination,
+            includeKnownAdas: true,
+            customOptionsMsrp,
+          })
+        : null,
+    [listing, includeDestination, customOptionsMsrp]
+  );
 
   if (!listing) return null;
 
@@ -165,6 +182,100 @@ export default function ListingDrawer({
             <div>Source: <span className="mono">{listing.source}</span></div>
           </div>
         </div>
+
+        {msrpCalc?.effectiveMsrp && (
+          <div className="msrp-calc-card" aria-label="MSRP Savings Calculator">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700 }}>
+                <Calculator size={14} style={{ color: 'var(--status-good)' }} />
+                <span>Savings vs. Original MSRP</span>
+                <span className="status-pill cache" style={{ fontSize: '10px', padding: '1px 6px' }}>
+                  {msrpCalc.msrpSource === 'autodev_base' ? 'Auto.dev Base' : 'Trim Lookup'}
+                </span>
+              </div>
+              <div
+                className="mono"
+                style={{
+                  fontSize: '15px',
+                  fontWeight: 800,
+                  color: (msrpCalc.savingsAmount ?? 0) > 0 ? 'var(--status-good)' : 'var(--ink-secondary)',
+                }}
+              >
+                {(msrpCalc.savingsAmount ?? 0) > 0
+                  ? `-${formatCurrency(msrpCalc.savingsAmount)} (${msrpCalc.savingsPct.toFixed(1)}% off)`
+                  : msrpCalc.savingsAmount != null
+                    ? `+${formatCurrency(Math.abs(msrpCalc.savingsAmount))} vs MSRP`
+                    : '—'}
+              </div>
+            </div>
+
+            <div className="msrp-calc-grid">
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '6px' }}>
+                <span style={{ color: 'var(--ink-muted)' }}>Base MSRP</span>
+                <strong className="mono">{formatCurrency(msrpCalc.baseMsrp)}</strong>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '6px' }}>
+                <span style={{ color: 'var(--ink-muted)' }}>Est. Sticker</span>
+                <strong className="mono">{formatCurrency(msrpCalc.effectiveMsrp)}</strong>
+              </div>
+              {msrpCalc.knownAdasLabel && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '6px', gridColumn: '1 / -1' }}>
+                  <span style={{ color: 'var(--ink-muted)' }}>ADAS ({msrpCalc.knownAdasLabel})</span>
+                  <strong className="mono">
+                    {msrpCalc.knownAdasMsrp > 0 ? `+${formatCurrency(msrpCalc.knownAdasMsrp)}` : 'Included'}
+                  </strong>
+                </div>
+              )}
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '8px',
+                paddingTop: '8px',
+                borderTop: '1px solid var(--border-subtle)',
+                fontSize: '12px',
+              }}
+            >
+              <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={includeDestination}
+                  onChange={(e) => setIncludeDestination(e.target.checked)}
+                />
+                <span>Dest. (+{formatCurrency(msrpCalc.destinationMsrp)})</span>
+              </label>
+
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                <span style={{ color: 'var(--ink-muted)' }}>Added options $</span>
+                <input
+                  type="number"
+                  min={0}
+                  step={500}
+                  className="input-control mono"
+                  style={{ width: '82px', height: '26px', padding: '2px 6px', fontSize: '12px' }}
+                  value={customOptionsMsrp}
+                  onChange={(e) => setCustomOptionsMsrp(Math.max(0, Number(e.target.value) || 0))}
+                  aria-label="Added factory options USD"
+                />
+                {[0, 2900, 6000].map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    className={`filter-chip ${customOptionsMsrp === preset ? 'active-ev' : ''}`}
+                    style={{ padding: '2px 6px', fontSize: '10px' }}
+                    onClick={() => setCustomOptionsMsrp(preset)}
+                  >
+                    {preset === 0 ? '$0' : `+$${(preset / 1000).toFixed(preset % 1000 === 0 ? 0 : 1)}k`}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '13px' }}>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>

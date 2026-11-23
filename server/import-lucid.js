@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { createDatabase } from './db.js';
 import { upsertListingRecord } from './autodevClient.js';
 import { findMatchingExistingLucid, parseLucidMhtml } from '../src/utils/lucidMhtmlParser.js';
+import { lookupBaseMsrp } from '../src/utils/msrpEstimator.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const IMPORTS_DIR = path.resolve(__dirname, '../imports');
@@ -60,6 +61,7 @@ export function importLucidHtmlToDb(db, rawContent, label = 'manual-upload') {
         exteriorColor: item.exterior_color,
         interiorColor: item.interior_color,
         price: item.price,
+        baseMsrp: lookupBaseMsrp(item),
         miles: item.miles,
         condition: item.condition,
         dealer: item.dealer,

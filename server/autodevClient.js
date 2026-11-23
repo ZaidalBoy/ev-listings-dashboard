@@ -58,6 +58,7 @@ export function normalizeListingRow(raw) {
     exteriorColor: v.exteriorColor || '',
     interiorColor: v.interiorColor || '',
     price: r.price != null ? Number(r.price) : null,
+    baseMsrp: v.baseMsrp != null && Number(v.baseMsrp) > 0 ? Number(v.baseMsrp) : null,
     miles: r.miles != null ? Number(r.miles) : null,
     condition,
     dealer: r.dealer || '',
@@ -112,11 +113,11 @@ export function upsertListingRecord(db, normalized, source = 'autodev') {
   db.prepare(`
     INSERT INTO listings (
       vin, year, make, model, trim, body_style, drivetrain, fuel,
-      exterior_color, interior_color, price, previous_price, miles, condition,
+      exterior_color, interior_color, price, previous_price, base_msrp, miles, condition,
       dealer, city, state, zip, vdp_url, carfax_url, primary_image,
       source, first_seen_at, last_seen_at, updated_at, removed_at,
       price_history, raw_json
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(vin) DO UPDATE SET
       year = excluded.year,
       make = excluded.make,
@@ -129,6 +130,7 @@ export function upsertListingRecord(db, normalized, source = 'autodev') {
       interior_color = excluded.interior_color,
       price = excluded.price,
       previous_price = ?,
+      base_msrp = COALESCE(excluded.base_msrp, listings.base_msrp),
       miles = excluded.miles,
       condition = excluded.condition,
       dealer = excluded.dealer,
@@ -157,6 +159,7 @@ export function upsertListingRecord(db, normalized, source = 'autodev') {
     normalized.interiorColor,
     normalized.price,
     previousPrice,
+    normalized.baseMsrp ?? null,
     normalized.miles,
     normalized.condition,
     normalized.dealer,
