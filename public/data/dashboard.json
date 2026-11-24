@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T11:42:12.958Z",
+  "generatedAt": "2026-11-24T00:38:07.414Z",
   "staticSnapshot": true,
   "listings": [
     {
@@ -6773,7 +6773,7 @@
     "avgPrice": 39117,
     "minPrice": 23998,
     "priceDropsCount": 36,
-    "newTodayCount": 3,
+    "newTodayCount": 2,
     "starredCount": 0,
     "soldCount": 31,
     "lastCacheUpdate": "2026-11-23T11:10:53.048Z"
@@ -6812,12 +6812,12 @@
     "reserveBuffer": 50,
     "autoSyncBudgetRemaining": 863,
     "pctUsed": 8.7,
-    "dayOfMonth": 23,
+    "dayOfMonth": 24,
     "daysInMonth": 30,
-    "daysRemaining": 8,
-    "dailyBurnRate": 3.78,
-    "projectedMonthEnd": 113,
-    "safeDailyBudget": 114.1,
+    "daysRemaining": 7,
+    "dailyBurnRate": 3.63,
+    "projectedMonthEnd": 109,
+    "safeDailyBudget": 130.4,
     "dailyHistory": [
       {
         "day": "2026-11-14",
